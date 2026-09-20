@@ -498,6 +498,93 @@ canvas{
   }
 }
 
+
+
+/* =========================================================
+   UPDATE MODAL
+========================================================= */
+
+.update-overlay{
+  position:fixed;
+  inset:0;
+  z-index:1000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(0,0,0,.78);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+}
+
+.update-modal{
+  width:min(420px,100%);
+  padding:22px;
+  background:linear-gradient(145deg,rgba(13,22,18,.99),rgba(4,7,6,.99));
+  border:1px solid rgba(0,232,135,.30);
+  border-radius:22px;
+  box-shadow:0 25px 70px rgba(0,0,0,.75);
+}
+
+.update-icon{
+  width:46px;
+  height:46px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:14px;
+  border-radius:14px;
+  background:rgba(0,232,135,.10);
+  border:1px solid rgba(0,232,135,.28);
+  color:var(--green);
+  font-size:22px;
+}
+
+.update-title{
+  margin:0;
+  font-size:21px;
+  font-weight:850;
+}
+
+.update-text{
+  margin:9px 0 20px;
+  color:#9aa7a1;
+  font-size:13px;
+  line-height:1.55;
+}
+
+.update-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.update-actions button{
+  height:48px;
+  border-radius:14px;
+  font-family:inherit;
+  font-size:13px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.update-later{
+  color:#d7dfdb;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.12);
+}
+
+.update-now{
+  color:#00140b;
+  background:linear-gradient(135deg,#00bd70,#00e887);
+  border:1px solid rgba(0,232,135,.75);
+}
+
+.update-actions button:disabled{
+  opacity:.55;
+  cursor:default;
+}
+
 @media(max-width:380px){
 
   .results{
@@ -1489,6 +1576,51 @@ canvas{
   </div>
 
 </section>
+
+</div>
+
+<!-- UPDATE PROMPT -->
+<div
+  class="update-overlay"
+  id="updateModal"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="updateTitle">
+
+  <div class="update-modal">
+
+    <div class="update-icon">↻</div>
+
+    <h2
+      class="update-title"
+      id="updateTitle">
+      New version available
+    </h2>
+
+    <p class="update-text">
+      A newer version of My Finance Calculators is available.
+      You can update now or continue using your current version.
+    </p>
+
+    <div class="update-actions">
+
+      <button
+        type="button"
+        class="update-later"
+        id="updateLaterBtn">
+        Not now
+      </button>
+
+      <button
+        type="button"
+        class="update-now"
+        id="updateNowBtn">
+        Update now
+      </button>
+
+    </div>
+
+  </div>
 
 </div>
 
@@ -2906,6 +3038,210 @@ document.addEventListener(
 
 
 /* =========================================================
+   APP UPDATE SYSTEM
+========================================================= */
+
+const APP_VERSION = "1.0.0";
+const UPDATE_DEFERRED_KEY = "financeCalculatorUpdateDeferred";
+
+function showUpdateModal(remoteVersion){
+
+  const modal =
+    document.getElementById("updateModal");
+
+  if(!modal){
+    return;
+  }
+
+  modal.dataset.version = remoteVersion;
+  modal.style.display = "flex";
+
+}
+
+
+function hideUpdateModal(){
+
+  const modal =
+    document.getElementById("updateModal");
+
+  if(modal){
+    modal.style.display = "none";
+  }
+
+}
+
+
+async function checkForUpdate(){
+
+  if(!navigator.onLine){
+    return;
+  }
+
+  try{
+
+    const response =
+      await fetch(
+        "./version.json?check=" + Date.now(),
+        {
+          cache:"no-store",
+          headers:{
+            "Cache-Control":"no-cache"
+          }
+        }
+      );
+
+    if(!response.ok){
+      return;
+    }
+
+    const data =
+      await response.json();
+
+    const remoteVersion =
+      String(data.version || "").trim();
+
+    if(
+      !remoteVersion ||
+      remoteVersion === APP_VERSION
+    ){
+      return;
+    }
+
+    const deferredVersion =
+      localStorage.getItem(UPDATE_DEFERRED_KEY);
+
+    if(deferredVersion === remoteVersion){
+      return;
+    }
+
+    showUpdateModal(remoteVersion);
+
+  }catch(error){
+
+    console.log(
+      "Update check skipped:",
+      error
+    );
+
+  }
+
+}
+
+
+async function applyUpdate(){
+
+  const modal =
+    document.getElementById("updateModal");
+
+  const remoteVersion =
+    modal ? modal.dataset.version : "";
+
+  if(!remoteVersion){
+    return;
+  }
+
+  const updateButton =
+    document.getElementById("updateNowBtn");
+
+  if(updateButton){
+    updateButton.disabled = true;
+    updateButton.textContent = "Updating…";
+  }
+
+  try{
+
+    if(!navigator.onLine){
+      throw new Error("Offline");
+    }
+
+    const stamp = Date.now();
+
+    const rootResponse =
+      await fetch(
+        "./?update=" + stamp,
+        {cache:"no-store"}
+      );
+
+    const indexResponse =
+      await fetch(
+        "./index.html?update=" + stamp,
+        {cache:"no-store"}
+      );
+
+    if(
+      !rootResponse.ok ||
+      !indexResponse.ok
+    ){
+      throw new Error(
+        "Could not download update."
+      );
+    }
+
+    if("caches" in window){
+
+      const cacheNames =
+        await caches.keys();
+
+      const appCacheName =
+        cacheNames.find(
+          name =>
+            name.startsWith(
+              "finance-calculator-"
+            )
+        );
+
+      if(appCacheName){
+
+        const cache =
+          await caches.open(appCacheName);
+
+        await cache.put(
+          "./",
+          rootResponse.clone()
+        );
+
+        await cache.put(
+          "./index.html",
+          indexResponse.clone()
+        );
+
+      }
+
+    }
+
+    localStorage.setItem(
+      "financeCalculatorInstalledVersion",
+      remoteVersion
+    );
+
+    localStorage.removeItem(
+      UPDATE_DEFERRED_KEY
+    );
+
+    window.location.reload();
+
+  }catch(error){
+
+    console.log(
+      "Update failed:",
+      error
+    );
+
+    if(updateButton){
+      updateButton.disabled = false;
+      updateButton.textContent = "Update now";
+    }
+
+    alert(
+      "Update could not be downloaded. Please try again when you are online."
+    );
+
+  }
+
+}
+
+
+/* =========================================================
    SERVICE WORKER
 ========================================================= */
 
@@ -2916,7 +3252,10 @@ if("serviceWorker" in navigator){
     function(){
 
       navigator.serviceWorker
-        .register("./sw.js")
+        .register(
+          "./sw.js",
+          {updateViaCache:"none"}
+        )
         .catch(
           function(error){
 
@@ -2928,10 +3267,78 @@ if("serviceWorker" in navigator){
           }
         );
 
+      checkForUpdate();
+
     }
   );
 
+}else{
+
+  window.addEventListener(
+    "load",
+    checkForUpdate
+  );
+
 }
+
+
+/* =========================================================
+   UPDATE BUTTONS
+========================================================= */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  function(){
+
+    const laterButton =
+      document.getElementById(
+        "updateLaterBtn"
+      );
+
+    if(laterButton){
+
+      laterButton.addEventListener(
+        "click",
+        function(){
+
+          const modal =
+            document.getElementById(
+              "updateModal"
+            );
+
+          if(modal && modal.dataset.version){
+
+            localStorage.setItem(
+              UPDATE_DEFERRED_KEY,
+              modal.dataset.version
+            );
+
+          }
+
+          hideUpdateModal();
+
+        }
+      );
+
+    }
+
+
+    const nowButton =
+      document.getElementById(
+        "updateNowBtn"
+      );
+
+    if(nowButton){
+
+      nowButton.addEventListener(
+        "click",
+        applyUpdate
+      );
+
+    }
+
+  }
+);
 
 </script>
 
