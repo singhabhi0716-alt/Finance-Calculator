@@ -1,4 +1,4 @@
-const CACHE="my-finance-calculators-v8";
+const CACHE="my-finance-calculators-v10";
 
 const ASSETS=[
   "./",
