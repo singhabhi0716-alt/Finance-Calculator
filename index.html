@@ -501,8 +501,79 @@ canvas{
 
 
 /* =========================================================
-   UPDATE MODAL
+   UPDATE NOTICE + UPDATE MODAL
 ========================================================= */
+
+.update-notice{
+  position:fixed;
+  top:calc(12px + env(safe-area-inset-top,0px));
+  right:12px;
+  z-index:1100;
+  display:none;
+  align-items:center;
+  gap:9px;
+  max-width:calc(100% - 24px);
+  padding:10px 13px;
+  border-radius:14px;
+  background:rgba(8,15,12,.96);
+  border:1px solid rgba(0,232,135,.35);
+  box-shadow:0 12px 35px rgba(0,0,0,.55);
+  color:#dce8e2;
+  font-family:inherit;
+  font-size:12px;
+  font-weight:800;
+  cursor:pointer;
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+}
+
+.update-notice-icon{
+  width:28px;
+  height:28px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:0 0 28px;
+  border-radius:9px;
+  background:rgba(0,232,135,.10);
+  border:1px solid rgba(0,232,135,.28);
+  color:var(--green);
+  font-size:16px;
+}
+
+.update-notice-text{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+
+.update-notice-title{
+  color:#fff;
+  font-size:12px;
+}
+
+.update-notice-subtitle{
+  color:#7f8d86;
+  font-size:10px;
+  font-weight:700;
+}
+
+.update-notice:active{
+  transform:scale(.98);
+}
+
+.update-overlay{
+  position:fixed;
+  inset:0;
+  z-index:1000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(0,0,0,.78);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+}
 
 .update-overlay{
   position:fixed;
@@ -1578,6 +1649,26 @@ canvas{
 </section>
 
 </div>
+
+<!-- UPDATE NOTICE -->
+<button
+  type="button"
+  class="update-notice"
+  id="updateNotice"
+  aria-label="Open update available notification">
+
+  <span class="update-notice-icon">↻</span>
+
+  <span class="update-notice-text">
+    <span class="update-notice-title">
+      Update available
+    </span>
+    <span class="update-notice-subtitle">
+      Tap to update
+    </span>
+  </span>
+
+</button>
 
 <!-- UPDATE PROMPT -->
 <div
@@ -3042,7 +3133,21 @@ document.addEventListener(
 ========================================================= */
 
 const APP_VERSION = "1.0.0";
-const UPDATE_DEFERRED_KEY = "financeCalculatorUpdateDeferred";
+
+function showUpdateNotice(remoteVersion){
+
+  const notice =
+    document.getElementById("updateNotice");
+
+  if(!notice){
+    return;
+  }
+
+  notice.dataset.version = remoteVersion;
+  notice.style.display = "flex";
+
+}
+
 
 function showUpdateModal(remoteVersion){
 
@@ -3107,14 +3212,7 @@ async function checkForUpdate(){
       return;
     }
 
-    const deferredVersion =
-      localStorage.getItem(UPDATE_DEFERRED_KEY);
-
-    if(deferredVersion === remoteVersion){
-      return;
-    }
-
-    showUpdateModal(remoteVersion);
+    showUpdateNotice(remoteVersion);
 
   }catch(error){
 
@@ -3283,12 +3381,33 @@ if("serviceWorker" in navigator){
 
 
 /* =========================================================
-   UPDATE BUTTONS
+   UPDATE NOTICE + BUTTONS
 ========================================================= */
 
 document.addEventListener(
   "DOMContentLoaded",
   function(){
+
+    const notice =
+      document.getElementById(
+        "updateNotice"
+      );
+
+    if(notice){
+
+      notice.addEventListener(
+        "click",
+        function(){
+
+          showUpdateModal(
+            this.dataset.version || ""
+          );
+
+        }
+      );
+
+    }
+
 
     const laterButton =
       document.getElementById(
@@ -3300,20 +3419,6 @@ document.addEventListener(
       laterButton.addEventListener(
         "click",
         function(){
-
-          const modal =
-            document.getElementById(
-              "updateModal"
-            );
-
-          if(modal && modal.dataset.version){
-
-            localStorage.setItem(
-              UPDATE_DEFERRED_KEY,
-              modal.dataset.version
-            );
-
-          }
 
           hideUpdateModal();
 
