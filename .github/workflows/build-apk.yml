@@ -18,19 +18,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v5
 
+
       - name: Set up Java
         uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: "17"
 
+
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: "8.7"
 
+
       - name: Set up Android SDK
         uses: android-actions/setup-android@v4
+
 
       - name: Install Android SDK
         run: |
@@ -38,12 +42,14 @@ jobs:
           sdkmanager "platforms;android-35"
           sdkmanager "build-tools;35.0.0"
 
+
       - name: Create Android project
         run: |
+
           mkdir -p app/src/main/java/com/singhabhi0716/financecalculator
           mkdir -p app/src/main/res/values
           mkdir -p app/src/main/res/drawable
-          mkdir -p app/src/main/assets
+
 
           cat > settings.gradle <<'EOF'
           pluginManagement {
@@ -66,16 +72,19 @@ jobs:
           include(":app")
           EOF
 
+
           cat > build.gradle <<'EOF'
           plugins {
               id 'com.android.application' version '8.6.1' apply false
           }
           EOF
 
+
           cat > gradle.properties <<'EOF'
           org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8
           android.useAndroidX=false
           EOF
+
 
           cat > app/build.gradle <<'EOF'
           plugins {
@@ -96,9 +105,14 @@ jobs:
           }
           EOF
 
+
           cat > app/src/main/AndroidManifest.xml <<'EOF'
           <?xml version="1.0" encoding="utf-8"?>
+
           <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+              <uses-permission
+                  android:name="android.permission.INTERNET" />
 
               <application
                   android:allowBackup="false"
@@ -113,8 +127,13 @@ jobs:
                       android:screenOrientation="portrait">
 
                       <intent-filter>
-                          <action android:name="android.intent.action.MAIN" />
-                          <category android:name="android.intent.category.LAUNCHER" />
+
+                          <action
+                              android:name="android.intent.action.MAIN" />
+
+                          <category
+                              android:name="android.intent.category.LAUNCHER" />
+
                       </intent-filter>
 
                   </activity>
@@ -124,28 +143,50 @@ jobs:
           </manifest>
           EOF
 
+
           cat > app/src/main/res/values/strings.xml <<'EOF'
           <?xml version="1.0" encoding="utf-8"?>
+
           <resources>
-              <string name="app_name">My Finance Calculators</string>
+
+              <string name="app_name">
+                  My Finance Calculators
+              </string>
+
           </resources>
           EOF
+
 
           cat > app/src/main/res/values/styles.xml <<'EOF'
           <?xml version="1.0" encoding="utf-8"?>
+
           <resources>
-              <style name="AppTheme" parent="android:style/Theme.Material.Light.NoActionBar">
+
+              <style
+                  name="AppTheme"
+                  parent="android:style/Theme.Material.NoActionBar">
+
                   <item name="android:fontFamily">sans</item>
-                  <item name="android:windowLightStatusBar">true</item>
-                  <item name="android:statusBarColor">#F6FAF7</item>
-                  <item name="android:navigationBarColor">#F6FAF7</item>
+
+                  <item name="android:windowLightStatusBar">false</item>
+
+                  <item name="android:statusBarColor">#000000</item>
+
+                  <item name="android:navigationBarColor">#000000</item>
+
+                  <item name="android:windowActionModeOverlay">true</item>
+
               </style>
+
           </resources>
           EOF
 
+
           cat > app/src/main/res/drawable/app_icon.xml <<'EOF'
           <?xml version="1.0" encoding="utf-8"?>
-          <vector xmlns:android="http://schemas.android.com/apk/res/android"
+
+          <vector
+              xmlns:android="http://schemas.android.com/apk/res/android"
               android:width="108dp"
               android:height="108dp"
               android:viewportWidth="108"
@@ -166,6 +207,7 @@ jobs:
           </vector>
           EOF
 
+
           cat > app/src/main/java/com/singhabhi0716/financecalculator/MainActivity.java <<'EOF'
           package com.singhabhi0716.financecalculator;
 
@@ -182,65 +224,72 @@ jobs:
 
               @Override
               protected void onCreate(Bundle savedInstanceState) {
+
                   super.onCreate(savedInstanceState);
 
                   Window window = getWindow();
-                  window.setStatusBarColor(0xFFF6FAF7);
-                  window.setNavigationBarColor(0xFFF6FAF7);
+
+                  window.setStatusBarColor(0xFF000000);
+                  window.setNavigationBarColor(0xFF000000);
 
                   webView = new WebView(this);
-                  webView.setBackgroundColor(0xFFF6FAF7);
-                  webView.setWebViewClient(new WebViewClient());
 
-                  WebSettings settings = webView.getSettings();
+                  webView.setBackgroundColor(0xFF000000);
+
+                  webView.setWebViewClient(
+                      new WebViewClient()
+                  );
+
+                  WebSettings settings =
+                      webView.getSettings();
+
                   settings.setJavaScriptEnabled(true);
+
                   settings.setDomStorageEnabled(true);
-                  settings.setAllowFileAccess(true);
+
+                  settings.setAllowFileAccess(false);
+
                   settings.setAllowContentAccess(false);
+
                   settings.setBuiltInZoomControls(false);
+
                   settings.setDisplayZoomControls(false);
 
-                  webView.loadUrl("file:///android_asset/index.html");
+                  settings.setSupportZoom(false);
+
+                  webView.loadUrl(
+                      "https://singhabhi0716-alt.github.io/Finance-Calculator/"
+                  );
 
                   setContentView(webView);
               }
 
               @Override
               public void onBackPressed() {
-                  if (webView != null && webView.canGoBack()) {
+
+                  if (
+                      webView != null &&
+                      webView.canGoBack()
+                  ) {
+
                       webView.goBack();
+
                   } else {
+
                       super.onBackPressed();
+
                   }
+
               }
+
           }
           EOF
 
-          cp index.html app/src/main/assets/index.html
-
-      - name: Apply APK-specific changes
-        run: |
-          FILE="app/src/main/assets/index.html"
-
-          sed -i 's/>Mutual Fund</>Investment</g' "$FILE"
-          sed -i 's/>Car Loan</>Loan</g' "$FILE"
-
-          sed -i 's/value="25000"/value="0"/g' "$FILE"
-          sed -i 's/value="12"/value="0"/g' "$FILE"
-          sed -i 's/value="15"/value="0"/g' "$FILE"
-          sed -i 's/value="10"/value="0"/g' "$FILE"
-          sed -i 's/value="6"/value="0"/g' "$FILE"
-          sed -i 's/value="1278000"/value="0"/g' "$FILE"
-          sed -i 's/value="8.05"/value="0"/g' "$FILE"
-          sed -i 's/value="84"/value="0"/g' "$FILE"
-          sed -i 's/value="12" min="0"/value="0" min="0"/g' "$FILE"
-          sed -i 's/value="4"/value="0"/g' "$FILE"
-          sed -i 's/value="7"/value="0"/g' "$FILE"
-
-          sed -i 's/calcOffset();//g' "$FILE"
 
       - name: Build APK
-        run: gradle --no-daemon assembleDebug
+        run: |
+          gradle --no-daemon assembleDebug
+
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
