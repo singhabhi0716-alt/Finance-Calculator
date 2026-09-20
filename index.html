@@ -81,6 +81,7 @@ canvas{width:100%;height:100%;display:block}
     </div>
   </div>
   <div class="privacy">● Private • Offline • On-device</div>
+  <button id="installApp" class="primary hidden" style="width:auto;margin-top:10px;padding:9px 14px;border-radius:12px">Install app</button>
 </header>
 
 <div class="tabs">
@@ -252,21 +253,23 @@ function loanSchedule({
   extraMonth=12, prepay=0, prepayAfter=0, partCharge=0,
   closureCharge=0
 }){
-  principal=Math.max(0,principal);
-  annual=Math.max(0,annual);
-  tenure=Math.max(1,Math.round(tenure));
-  extraMonthly=Math.max(0,extraMonthly);
-  extraYearly=Math.max(0,extraYearly);
-  extraMonth=Math.min(12,Math.max(1,Math.round(extraMonth)));
-  prepay=Math.max(0,prepay);
-  prepayAfter=Math.max(1,Math.round(prepayAfter));
-  partCharge=Math.max(0,partCharge);
-  closureCharge=Math.max(0,closureCharge);
+  principal=Math.max(0,Number(principal)||0);
+  annual=Math.max(0,Number(annual)||0);
+  tenure=Math.max(1,Math.round(Number(tenure)||1));
+  extraMonthly=Math.max(0,Number(extraMonthly)||0);
+  extraYearly=Math.max(0,Number(extraYearly)||0);
+  extraMonth=Math.min(12,Math.max(1,Math.round(Number(extraMonth)||12)));
+  prepay=Math.max(0,Number(prepay)||0);
+  prepayAfter=Math.max(1,Math.round(Number(prepayAfter)||1));
+  partCharge=Math.max(0,Number(partCharge)||0);
+  closureCharge=Math.max(0,Number(closureCharge)||0);
 
-  if(principal<=0) return {
-    emi:0,months:0,total:0,interest:0,partPaymentCharges:0,
-    foreclosureCharge:0,principalPaid:0
-  };
+  if(principal<=0){
+    return {
+      emi:0,months:0,total:0,interest:0,partPaymentCharges:0,
+      foreclosureCharge:0,principalPaid:0
+    };
+  }
 
   const r=annual/100/12;
   const emi=r===0
@@ -289,14 +292,16 @@ function loanSchedule({
     const interestPart=opening*r;
     interest+=interestPart;
 
-    // Never pay more than the amount actually outstanding.
-    const normalDue=opening+interestPart;
-    const monthlyPayment=Math.min(normalDue,emi+extraMonthly);
-    balance=normalDue-monthlyPayment;
-    total+=monthlyPayment;
-    principalPaid+=Math.max(0,monthlyPayment-interestPart);
+    // Regular EMI + optional monthly extra.
+    const due=opening+interestPart;
+    const scheduledPayment=Math.min(due,emi+extraMonthly);
+    const scheduledPrincipal=Math.max(0,scheduledPayment-interestPart);
 
-    // One-time prepayment after the requested EMI.
+    balance=Math.max(0,due-scheduledPayment);
+    total+=scheduledPayment;
+    principalPaid+=scheduledPrincipal;
+
+    // One-time part payment after the selected EMI.
     if(!prepayDone && prepay>0 && month===prepayAfter && balance>0.005){
       const pp=Math.min(balance,prepay);
       const fee=pp*partCharge/100;
@@ -307,8 +312,8 @@ function loanSchedule({
       prepayDone=true;
     }
 
-    // Annual payment. Month 12 means December, and therefore occurs at
-    // months 12, 24, 36...; month 1 means January, at 1, 13, 25...
+    // Annual part payment in the selected calendar month:
+    // month 12 = Dec, 24 = Dec next year; month 1 = Jan, 13 = Jan next year.
     if(extraYearly>0 && balance>0.005 &&
        ((month-extraMonth)%12===0)){
       const pp=Math.min(balance,extraYearly);
@@ -319,27 +324,31 @@ function loanSchedule({
       partPaymentCharges+=fee;
     }
 
-    // If the loan closes before its original contractual tenure, apply the
-    // pre-closure charge to the principal outstanding that was actually
-    // closed in this final cycle. Do not double-count part payments.
+    // If anything paid this cycle closes the loan before its original tenure,
+    // apply the foreclosure fee to the principal actually outstanding at the
+    // moment immediately before the final closure payment.
     if(balance<=0.005){
       balance=0;
+
       if(month<tenure && closureCharge>0){
-        const outstandingPrincipalClosed=Math.max(0,principalPaid-principal);
-        // Fallback to the remaining principal in the final cycle if needed.
-        const finalPrincipal=Math.max(
+        const principalClosedThisCycle=Math.max(
           0,
-          Math.min(opening, monthlyPayment-interestPart)
+          Math.min(opening, scheduledPrincipal)
         );
-        foreclosureCharge=finalPrincipal*closureCharge/100;
+        foreclosureCharge=principalClosedThisCycle*closureCharge/100;
         total+=foreclosureCharge;
       }
     }
   }
 
   return {
-    emi,months:month,total,interest,partPaymentCharges,
-    foreclosureCharge,principalPaid
+    emi,
+    months:month,
+    total,
+    interest,
+    partPaymentCharges,
+    foreclosureCharge,
+    principalPaid
   };
 }
 
@@ -492,7 +501,31 @@ function drawChart(canvas,data){
   c.fillText('Year '+(data.length-1),w-62,h-6);
 }
 
+/* ---------- PWA install ---------- */
+let deferredInstallPrompt=null;
+const installButton=$('installApp');
+
+window.addEventListener('beforeinstallprompt',event=>{
+  event.preventDefault();
+  deferredInstallPrompt=event;
+  installButton.classList.remove('hidden');
+});
+
+installButton.addEventListener('click',async()=>{
+  if(!deferredInstallPrompt) return;
+  deferredInstallPrompt.prompt();
+  await deferredInstallPrompt.userChoice;
+  deferredInstallPrompt=null;
+  installButton.classList.add('hidden');
+});
+
+window.addEventListener('appinstalled',()=>{
+  deferredInstallPrompt=null;
+  installButton.classList.add('hidden');
+});
+
 /* ---------- Event wiring ---------- */
+
 $('calcMF').addEventListener('click',calcMF);
 $('calcLoan').addEventListener('click',calcLoan);
 $('calcTarget').addEventListener('click',calcTarget);
