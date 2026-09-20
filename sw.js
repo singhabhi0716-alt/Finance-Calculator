@@ -1,55 +1,41 @@
-const CACHE="my-finance-calculators-v10";
+const CACHE_NAME = "finance-calculator-v2";
 
-const ASSETS=[
+const FILES_TO_CACHE = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
-  "./sw.js",
   "./icon-192.png",
   "./icon-512.png"
 ];
 
-self.addEventListener("install",event=>{
+self.addEventListener("install", event => {
   event.waitUntil(
-    caches.open(CACHE)
-      .then(cache=>cache.addAll(ASSETS))
-      .then(()=>self.skipWaiting())
+    caches.open(CACHE_NAME).then(cache => {
+      return cache.addAll(FILES_TO_CACHE);
+    })
   );
+
+  self.skipWaiting();
 });
 
-self.addEventListener("activate",event=>{
+self.addEventListener("activate", event => {
   event.waitUntil(
-    caches.keys()
-      .then(keys=>Promise.all(
-        keys.filter(key=>key!==CACHE).map(key=>caches.delete(key))
-      ))
-      .then(()=>self.clients.claim())
+    caches.keys().then(keys => {
+      return Promise.all(
+        keys
+          .filter(key => key !== CACHE_NAME)
+          .map(key => caches.delete(key))
+      );
+    })
   );
+
+  self.clients.claim();
 });
 
-self.addEventListener("fetch",event=>{
-  const url=new URL(event.request.url);
-
-  // Always try the network first for the app shell so fixes reach the phone.
-  if(
-    url.pathname.endsWith("/index.html") ||
-    url.pathname.endsWith("/sw.js") ||
-    url.pathname.endsWith("/manifest.webmanifest") ||
-    url.pathname.endsWith("/")
-  ){
-    event.respondWith(
-      fetch(event.request)
-        .then(response=>{
-          const copy=response.clone();
-          caches.open(CACHE).then(cache=>cache.put(event.request,copy));
-          return response;
-        })
-        .catch(()=>caches.match(event.request))
-    );
-    return;
-  }
-
+self.addEventListener("fetch", event => {
   event.respondWith(
-    caches.match(event.request).then(response=>response || fetch(event.request))
+    caches.match(event.request).then(cachedResponse => {
+      return cachedResponse || fetch(event.request);
+    })
   );
 });
