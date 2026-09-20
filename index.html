@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 
 <meta name="viewport"
-      content="width=device-width, initial-scale=1, viewport-fit=cover">
+      content="width=device-width,initial-scale=1,viewport-fit=cover">
 
 <meta name="theme-color" content="#000000">
 <meta name="color-scheme" content="dark">
@@ -18,20 +20,13 @@
 
 <style>
 
-/* =========================================================
-   DESIGN
-========================================================= */
-
 :root{
-  --bg:#000000;
+  --bg:#000;
   --card:#080d0b;
-  --card2:#0c1310;
   --text:#f4f7f5;
   --muted:#8d9a94;
   --green:#00e887;
-  --green2:#00c975;
   --border:rgba(255,255,255,.12);
-  --danger:#ff5b67;
   --shadow:0 15px 45px rgba(0,0,0,.65);
 }
 
@@ -47,13 +42,10 @@ html{
 body{
   margin:0;
   min-height:100dvh;
-
   padding-top:env(safe-area-inset-top,0px);
   padding-bottom:env(safe-area-inset-bottom,0px);
-
   background:#000;
   color:var(--text);
-
   font-family:
     Inter,
     system-ui,
@@ -61,7 +53,6 @@ body{
     BlinkMacSystemFont,
     "Segoe UI",
     sans-serif;
-
   -webkit-font-smoothing:antialiased;
   overflow-x:hidden;
 }
@@ -75,7 +66,6 @@ body::before{
 
   position:fixed;
   inset:-10%;
-
   z-index:-1;
 
   font-size:105px;
@@ -93,7 +83,6 @@ body::before{
 .container{
   width:min(760px,100%);
   margin:auto;
-
   padding:
     22px
     16px
@@ -101,9 +90,7 @@ body::before{
 }
 
 
-/* =========================================================
-   HEADER
-========================================================= */
+/* HEADER */
 
 .header{
   margin-bottom:20px;
@@ -119,7 +106,6 @@ body::before{
 .brand-icon{
   width:38px;
   height:38px;
-
   border-radius:10px;
 
   display:flex;
@@ -131,8 +117,6 @@ body::before{
 
   color:var(--green);
   font-size:22px;
-
-  box-shadow:0 0 25px rgba(0,232,135,.08);
 }
 
 .brand-text{
@@ -168,25 +152,16 @@ h1 span{
   display:flex;
   gap:18px;
   margin-top:14px;
-
   font-size:12px;
   color:#89968f;
 }
 
-.private span{
-  white-space:nowrap;
-}
 
-
-/* =========================================================
-   TABS
-========================================================= */
+/* TABS */
 
 .tabs{
   position:sticky;
-
   top:env(safe-area-inset-top,0px);
-
   z-index:100;
 
   display:grid;
@@ -208,16 +183,11 @@ h1 span{
 }
 
 .tab{
-  display:block;
-
   border:1px solid transparent;
-
   background:transparent;
-
   color:#87938d;
 
   padding:14px 6px;
-
   border-radius:12px;
 
   font-family:inherit;
@@ -225,25 +195,12 @@ h1 span{
   font-size:12px;
 
   cursor:pointer;
-  touch-action:manipulation;
-  user-select:none;
-
-  transition:
-    background .2s ease,
-    color .2s ease,
-    border-color .2s ease,
-    transform .1s ease;
 }
 
 .tab.active{
   color:var(--green);
-
   background:rgba(0,232,135,.09);
-
   border-color:rgba(0,232,135,.45);
-
-  box-shadow:
-    0 0 20px rgba(0,232,135,.08);
 }
 
 .tab:active{
@@ -251,9 +208,7 @@ h1 span{
 }
 
 
-/* =========================================================
-   PANELS
-========================================================= */
+/* PANELS */
 
 .panel{
   display:none !important;
@@ -264,9 +219,7 @@ h1 span{
 }
 
 
-/* =========================================================
-   CARDS
-========================================================= */
+/* CARDS */
 
 .card{
   position:relative;
@@ -305,8 +258,6 @@ h1 span{
       var(--green),
       transparent
     );
-
-  opacity:.7;
 }
 
 .card-title{
@@ -326,9 +277,7 @@ h1 span{
 }
 
 
-/* =========================================================
-   FORM
-========================================================= */
+/* FORM */
 
 .grid{
   display:grid;
@@ -371,8 +320,6 @@ select{
 
   outline:none;
 
-  transition:.2s ease;
-
   -webkit-appearance:none;
 }
 
@@ -381,16 +328,11 @@ select:focus{
   border-color:var(--green);
 
   box-shadow:
-    0 0 0 3px rgba(0,232,135,.07),
-    0 0 20px rgba(0,232,135,.04);
+    0 0 0 3px rgba(0,232,135,.07);
 }
 
 input::placeholder{
   color:#59645f;
-}
-
-select{
-  cursor:pointer;
 }
 
 .small{
@@ -406,9 +348,7 @@ select{
 }
 
 
-/* =========================================================
-   BUTTON
-========================================================= */
+/* BUTTON */
 
 button.primary{
   width:100%;
@@ -431,24 +371,15 @@ button.primary{
   font-size:15px;
 
   cursor:pointer;
-  touch-action:manipulation;
 
   margin-top:17px;
 
   box-shadow:
     0 9px 28px rgba(0,232,135,.16);
-
-  transition:.15s ease;
-}
-
-button.primary:active{
-  transform:scale(.985);
 }
 
 
-/* =========================================================
-   RESULTS
-========================================================= */
+/* RESULTS */
 
 .results{
   display:grid;
@@ -519,10 +450,12 @@ button.primary:active{
   line-height:1.55;
 }
 
+.note strong{
+  color:#b9c6c0;
+}
 
-/* =========================================================
-   CHART
-========================================================= */
+
+/* CHART */
 
 canvas{
   width:100%;
@@ -531,9 +464,7 @@ canvas{
 }
 
 
-/* =========================================================
-   MOBILE
-========================================================= */
+/* MOBILE */
 
 @media(max-width:560px){
 
@@ -588,6 +519,7 @@ canvas{
 }
 
 </style>
+
 </head>
 
 
@@ -595,10 +527,6 @@ canvas{
 
 <div class="container">
 
-
-<!-- =======================================================
-     HEADER
-======================================================= -->
 
 <header class="header">
 
@@ -628,10 +556,6 @@ canvas{
 
 </header>
 
-
-<!-- =======================================================
-     TABS
-======================================================= -->
 
 <div class="tabs">
 
@@ -688,7 +612,6 @@ canvas{
 
       </div>
 
-
       <div class="field">
 
         <label>Lump Sum (₹)</label>
@@ -700,7 +623,6 @@ canvas{
           min="0">
 
       </div>
-
 
       <div class="field">
 
@@ -715,7 +637,6 @@ canvas{
 
       </div>
 
-
       <div class="field">
 
         <label>Investment Period (Years)</label>
@@ -729,7 +650,6 @@ canvas{
 
       </div>
 
-
       <div class="field">
 
         <label>Annual SIP Step-up (%)</label>
@@ -742,7 +662,6 @@ canvas{
           step="0.1">
 
       </div>
-
 
       <div class="field">
 
@@ -759,14 +678,11 @@ canvas{
 
     </div>
 
-
     <button
       type="button"
       class="primary"
       id="calculateInvestmentBtn">
-
       Calculate Investment →
-
     </button>
 
   </div>
@@ -795,7 +711,6 @@ canvas{
 
       </div>
 
-
       <div class="result highlight">
 
         <div class="label">
@@ -809,7 +724,6 @@ canvas{
         </div>
 
       </div>
-
 
       <div class="result">
 
@@ -825,7 +739,6 @@ canvas{
 
       </div>
 
-
       <div class="result">
 
         <div class="label">
@@ -839,7 +752,6 @@ canvas{
         </div>
 
       </div>
-
 
       <div class="result">
 
@@ -855,7 +767,6 @@ canvas{
 
       </div>
 
-
       <div class="result">
 
         <div class="label">
@@ -869,7 +780,6 @@ canvas{
         </div>
 
       </div>
-
 
       <div class="result full">
 
@@ -937,7 +847,6 @@ canvas{
 
       </div>
 
-
       <div class="field">
 
         <label>Interest Rate (%)</label>
@@ -951,7 +860,6 @@ canvas{
 
       </div>
 
-
       <div class="field">
 
         <label>Tenure (Months)</label>
@@ -963,7 +871,6 @@ canvas{
           min="0">
 
       </div>
-
 
       <div class="field">
 
@@ -977,7 +884,6 @@ canvas{
 
       </div>
 
-
       <div class="field">
 
         <label>Extra Yearly Payment (₹)</label>
@@ -989,7 +895,6 @@ canvas{
           min="0">
 
       </div>
-
 
       <div class="field">
 
@@ -1015,7 +920,6 @@ canvas{
 
       </div>
 
-
       <div class="field">
 
         <label>One-time Prepayment (₹)</label>
@@ -1028,7 +932,6 @@ canvas{
 
       </div>
 
-
       <div class="field">
 
         <label>Prepay After (Months)</label>
@@ -1040,7 +943,6 @@ canvas{
           min="0">
 
       </div>
-
 
       <div class="field">
 
@@ -1057,14 +959,11 @@ canvas{
 
     </div>
 
-
     <button
       type="button"
       class="primary"
       id="calculateLoanBtn">
-
       Calculate Loan →
-
     </button>
 
   </div>
@@ -1093,7 +992,6 @@ canvas{
 
       </div>
 
-
       <div class="result">
 
         <div class="label">
@@ -1107,7 +1005,6 @@ canvas{
         </div>
 
       </div>
-
 
       <div class="result">
 
@@ -1151,7 +1048,6 @@ canvas{
 
       </div>
 
-
       <div class="result">
 
         <div class="label">
@@ -1165,7 +1061,6 @@ canvas{
         </div>
 
       </div>
-
 
       <div class="result">
 
@@ -1181,7 +1076,6 @@ canvas{
 
       </div>
 
-
       <div class="result">
 
         <div class="label">
@@ -1195,7 +1089,6 @@ canvas{
         </div>
 
       </div>
-
 
       <div class="result full">
 
@@ -1241,16 +1134,12 @@ canvas{
 
     </div>
 
-
     <button
       type="button"
       class="primary"
       id="calculateTargetBtn">
-
       Calculate Required Yearly Extra →
-
     </button>
-
 
     <div
       class="results"
@@ -1271,7 +1160,6 @@ canvas{
       </div>
 
     </div>
-
 
     <div class="note">
 
@@ -1301,19 +1189,19 @@ canvas{
       Invest vs Loan
     </div>
 
-
     <div class="note">
 
-      Compare investment gains against the loan interest
-      you want to offset.
+      Compare <strong>investment gains</strong> against
+      <strong>loan interest</strong>.
+
+      Your investment principal and SIP contributions
+      are never treated as gains.
 
     </div>
-
 
     <div
       class="grid"
       style="margin-top:15px">
-
 
       <div class="field">
 
@@ -1332,11 +1220,32 @@ canvas{
         </div>
 
         <div class="small">
-          You can edit this value whenever you want.
+          Editable override.
         </div>
 
       </div>
 
+      <div class="field">
+
+        <label>
+          Investment Period (Months)
+        </label>
+
+        <input
+          id="compareMonths"
+          type="number"
+          value="0"
+          min="1">
+
+        <div class="auto-note">
+          Auto-filled from Loan → Tenure
+        </div>
+
+        <div class="small">
+          Editable override.
+        </div>
+
+      </div>
 
       <div class="field">
 
@@ -1347,54 +1256,27 @@ canvas{
         <input
           id="compareReturn"
           type="number"
-          value="0"
+          value="12"
           min="0"
           step="0.1">
 
       </div>
 
-
       <div class="field">
 
         <label>
-          Investment Period (Years)
+          Monthly SIP (₹)
         </label>
 
         <input
-          id="compareYears"
+          id="compareSIP"
           type="number"
           value="0"
-          min="0"
-          step="0.5">
+          min="0">
 
       </div>
-
 
       <div class="field">
-
-        <label>
-          Investment Method
-        </label>
-
-        <select id="investmentMethod">
-
-          <option value="sip">
-            SIP only — no lump sum
-          </option>
-
-          <option value="lumpSip">
-            Lump sum + SIP
-          </option>
-
-        </select>
-
-      </div>
-
-
-      <div
-        class="field full"
-        id="compareLumpField"
-        style="display:none">
 
         <label>
           Starting Lump Sum (₹)
@@ -1408,16 +1290,37 @@ canvas{
 
       </div>
 
-    </div>
+      <div class="field">
 
+        <label>
+          Calculation Mode
+        </label>
+
+        <select id="compareMode">
+
+          <option value="requiredSip">
+            Find Required SIP
+          </option>
+
+          <option value="requiredReturn">
+            Find Required Return
+          </option>
+
+          <option value="current">
+            Calculate Current Investment
+          </option>
+
+        </select>
+
+      </div>
+
+    </div>
 
     <button
       type="button"
       class="primary"
       id="calculateCompareBtn">
-
       Calculate →
-
     </button>
 
   </div>
@@ -1427,17 +1330,15 @@ canvas{
 
     <div class="card-title">
       <span class="card-title-icon">🎯</span>
-      Investment Required
+      Break-even Investment
     </div>
 
-
     <div class="results">
-
 
       <div class="result">
 
         <div class="label">
-          Loan Interest to Offset
+          Loan Interest
         </div>
 
         <div
@@ -1448,6 +1349,19 @@ canvas{
 
       </div>
 
+      <div class="result">
+
+        <div class="label">
+          Investment Period
+        </div>
+
+        <div
+          class="value"
+          id="comparePeriodResult">
+          0 months
+        </div>
+
+      </div>
 
       <div class="result highlight">
 
@@ -1463,51 +1377,19 @@ canvas{
 
       </div>
 
-
-      <div class="result">
+      <div class="result highlight">
 
         <div class="label">
-          Required Lump Sum Today
+          Required Annual Return
         </div>
 
         <div
           class="value"
-          id="requiredLump">
-          ₹0
+          id="requiredReturn">
+          0.00%
         </div>
 
       </div>
-
-
-      <div class="result">
-
-        <div class="label">
-          Investment Gains
-        </div>
-
-        <div
-          class="value"
-          id="investmentGains">
-          ₹0
-        </div>
-
-      </div>
-
-
-      <div class="result">
-
-        <div class="label">
-          Total SIP Contributions
-        </div>
-
-        <div
-          class="value"
-          id="sipContributions">
-          ₹0
-        </div>
-
-      </div>
-
 
       <div class="result">
 
@@ -1523,6 +1405,19 @@ canvas{
 
       </div>
 
+      <div class="result">
+
+        <div class="label">
+          Total SIP Contributions
+        </div>
+
+        <div
+          class="value"
+          id="sipContributions">
+          ₹0
+        </div>
+
+      </div>
 
       <div class="result">
 
@@ -1538,7 +1433,6 @@ canvas{
 
       </div>
 
-
       <div class="result highlight">
 
         <div class="label">
@@ -1553,21 +1447,19 @@ canvas{
 
       </div>
 
-
-      <div class="result full">
+      <div class="result">
 
         <div class="label">
-          Investment Profit
+          Investment Gains
         </div>
 
         <div
           class="value"
-          id="compareProfit">
+          id="investmentGains">
           ₹0
         </div>
 
       </div>
-
 
       <div class="result full">
 
@@ -1585,14 +1477,12 @@ canvas{
 
     </div>
 
-
     <div
       class="note"
       id="compareNote">
 
-      Enter your expected investment return and period
-      to calculate the investment required to offset
-      the loan interest.
+      Investment gains are compared with loan interest only.
+      Principal and SIP contributions are not counted as gains.
 
     </div>
 
@@ -1604,6 +1494,7 @@ canvas{
 
 
 <script>
+
 
 /* =========================================================
    UTILITIES
@@ -1733,7 +1624,6 @@ function calculateInvestment(){
 
       invested += currentSip;
 
-
       if(m % 12 === 0){
 
         yearlyData.push({
@@ -1751,13 +1641,10 @@ function calculateInvestment(){
 
   }
 
-
   const profit =
     balance - invested;
 
-
   let realCorpus = balance;
-
 
   if(
     inflation > 0 &&
@@ -1773,13 +1660,10 @@ function calculateInvestment(){
 
   }
 
-
   const inflationImpact =
     balance - realCorpus;
 
-
   let realReturn = annual;
-
 
   if(inflation > 0){
 
@@ -1792,12 +1676,10 @@ function calculateInvestment(){
 
   }
 
-
   const multiple =
     invested > 0
       ? balance / invested
       : 0;
-
 
   document.getElementById("invInvested")
     .textContent = money(invested);
@@ -1821,7 +1703,6 @@ function calculateInvestment(){
   document.getElementById("realReturn")
     .textContent =
     realReturn.toFixed(2) + "%";
-
 
   drawInvestmentChart(yearlyData);
 
@@ -1851,7 +1732,6 @@ function drawInvestmentChart(data){
 
   ctx.clearRect(0,0,w,h);
 
-
   if(!data.length){
 
     ctx.fillStyle = "#69766f";
@@ -1867,7 +1747,6 @@ function drawInvestmentChart(data){
 
   }
 
-
   const pad = 35;
 
   const max =
@@ -1876,12 +1755,10 @@ function drawInvestmentChart(data){
       1
     );
 
-
   ctx.strokeStyle =
     "rgba(255,255,255,.08)";
 
   ctx.lineWidth = 1;
-
 
   for(let i=0; i<4; i++){
 
@@ -1906,9 +1783,7 @@ function drawInvestmentChart(data){
 
   }
 
-
   ctx.beginPath();
-
 
   data.forEach((item,index) => {
 
@@ -1920,25 +1795,18 @@ function drawInvestmentChart(data){
         Math.max(data.length-1,1)
       );
 
-
     const y =
       h-pad -
       (item.value/max) *
       (h-pad*2);
 
-
     if(index === 0){
-
       ctx.moveTo(x,y);
-
     }else{
-
       ctx.lineTo(x,y);
-
     }
 
   });
-
 
   ctx.strokeStyle = "#00e887";
   ctx.lineWidth = 3;
@@ -1967,17 +1835,14 @@ function calculateEMI(
 
   }
 
-
   const r =
     annualRate / 100 / 12;
-
 
   if(r === 0){
 
     return principal / months;
 
   }
-
 
   return (
     principal *
@@ -2021,7 +1886,6 @@ function simulateLoan(
 
   }
 
-
   const emi =
     calculateEMI(
       principal,
@@ -2029,10 +1893,8 @@ function simulateLoan(
       months
     );
 
-
   const monthlyRate =
     annualRate / 100 / 12;
-
 
   let balance = principal;
   let interest = 0;
@@ -2040,13 +1902,11 @@ function simulateLoan(
   let charge = 0;
   let month = 0;
 
-
   const maxMonths =
     Math.max(
       months * 2,
       1200
     );
-
 
   while(
     balance > 0.01 &&
@@ -2055,17 +1915,14 @@ function simulateLoan(
 
     month++;
 
-
     const interestPart =
       balance * monthlyRate;
-
 
     let payment =
       Math.min(
         emi,
         balance + interestPart
       );
-
 
     interest += interestPart;
 
@@ -2075,8 +1932,6 @@ function simulateLoan(
 
     total += payment;
 
-
-    /* Extra monthly */
 
     if(
       extraMonthly > 0 &&
@@ -2094,8 +1949,6 @@ function simulateLoan(
 
     }
 
-
-    /* Extra yearly */
 
     if(
       yearlyMonth > 0 &&
@@ -2116,8 +1969,6 @@ function simulateLoan(
     }
 
 
-    /* One-time prepayment */
-
     if(
       oneTimePrepay > 0 &&
       month === prepayAfter &&
@@ -2134,7 +1985,6 @@ function simulateLoan(
 
       total += extra;
 
-
       if(chargeRate > 0){
 
         const c =
@@ -2149,18 +1999,7 @@ function simulateLoan(
 
     }
 
-
-    if(
-      month > months &&
-      balance <= 0
-    ){
-
-      break;
-
-    }
-
   }
-
 
   return {
     months:month,
@@ -2301,25 +2140,28 @@ function calculateLoan(){
     money(simulated.total);
 
 
-  /* Loan → Invest vs Loan */
+  /* Automatically link loan values */
 
-  const compareInterest =
-    document.getElementById(
-      "compareInterest"
-    );
+  document.getElementById(
+    "compareInterest"
+  ).value =
+    Math.round(originalInterest);
+
+  document.getElementById(
+    "compareMonths"
+  ).value =
+    tenure;
 
 
-  if(compareInterest){
+  localStorage.setItem(
+    "loanInterestToOffset",
+    String(originalInterest)
+  );
 
-    compareInterest.value =
-      Math.round(originalInterest);
-
-    localStorage.setItem(
-      "loanInterestToOffset",
-      String(originalInterest)
-    );
-
-  }
+  localStorage.setItem(
+    "loanTenureToCompare",
+    String(tenure)
+  );
 
 }
 
@@ -2341,11 +2183,6 @@ function calculateTarget(){
 
   const target =
     num("targetMonths");
-
-  /*
-     IMPORTANT:
-     Use the user's selected yearly payment month.
-  */
 
   const yearlyMonth =
     num("extraMonth");
@@ -2375,16 +2212,11 @@ function calculateTarget(){
   }
 
 
-  /*
-     If no yearly payment month is selected,
-     target closure cannot be achieved using
-     yearly extra payments.
-  */
-
   if(yearlyMonth === 0){
 
     document.getElementById("requiredYearly")
-      .textContent = "Select a payment month";
+      .textContent =
+      "Select a payment month";
 
     return;
 
@@ -2394,11 +2226,6 @@ function calculateTarget(){
   let low = 0;
   let high = principal;
 
-
-  /*
-     Binary search for the yearly payment
-     required to reach the target closure.
-  */
 
   for(let i=0; i<70; i++){
 
@@ -2441,6 +2268,230 @@ function calculateTarget(){
 
 
 /* =========================================================
+   INVESTMENT MATH FOR INVEST VS LOAN
+========================================================= */
+
+function investmentGrowth(
+  annualReturn,
+  months
+){
+
+  const monthlyRate =
+    annualReturn / 100 / 12;
+
+  const growth =
+    Math.pow(
+      1 + monthlyRate,
+      months
+    );
+
+  const sipFactor =
+    monthlyRate === 0
+      ? months
+      : (growth - 1) / monthlyRate;
+
+  return {
+    growth:growth,
+    sipFactor:sipFactor
+  };
+
+}
+
+
+function investmentResult(
+  annualReturn,
+  months,
+  sip,
+  lump
+){
+
+  const data =
+    investmentGrowth(
+      annualReturn,
+      months
+    );
+
+  const totalSip =
+    sip * months;
+
+  const finalCorpus =
+    lump * data.growth +
+    sip * data.sipFactor;
+
+  const totalInvestment =
+    lump + totalSip;
+
+  const gains =
+    finalCorpus -
+    totalInvestment;
+
+  return {
+    finalCorpus:finalCorpus,
+    totalInvestment:totalInvestment,
+    totalSip:totalSip,
+    gains:gains
+  };
+
+}
+
+
+/* =========================================================
+   REQUIRED SIP
+========================================================= */
+
+function calculateRequiredSIP(
+  interest,
+  annualReturn,
+  months,
+  lump
+){
+
+  const data =
+    investmentGrowth(
+      annualReturn,
+      months
+    );
+
+
+  /*
+     Lump-sum gain
+     = lump × (growth - 1)
+  */
+
+  const lumpGain =
+    lump *
+    (data.growth - 1);
+
+
+  const remainingGain =
+    Math.max(
+      0,
+      interest - lumpGain
+    );
+
+
+  /*
+     SIP gain factor =
+     future value of SIP
+     minus actual SIP contributions
+  */
+
+  const sipGainFactor =
+    data.sipFactor -
+    months;
+
+
+  if(remainingGain <= 0){
+    return 0;
+  }
+
+
+  if(sipGainFactor <= 0){
+    return Infinity;
+  }
+
+
+  return (
+    remainingGain /
+    sipGainFactor
+  );
+
+}
+
+
+/* =========================================================
+   REQUIRED RETURN
+========================================================= */
+
+function calculateRequiredReturn(
+  interest,
+  sip,
+  months,
+  lump
+){
+
+  if(
+    interest <= 0 ||
+    months <= 0 ||
+    (sip <= 0 && lump <= 0)
+  ){
+
+    return 0;
+
+  }
+
+
+  function gainAtRate(rate){
+
+    return investmentResult(
+      rate,
+      months,
+      sip,
+      lump
+    ).gains;
+
+  }
+
+
+  if(
+    gainAtRate(0) >= interest
+  ){
+
+    return 0;
+
+  }
+
+
+  let low = 0;
+  let high = 100;
+
+
+  while(
+    gainAtRate(high) < interest &&
+    high < 1000
+  ){
+
+    high *= 2;
+
+  }
+
+
+  if(
+    gainAtRate(high) < interest
+  ){
+
+    return Infinity;
+
+  }
+
+
+  for(let i=0; i<80; i++){
+
+    const mid =
+      (low + high) / 2;
+
+
+    if(
+      gainAtRate(mid) < interest
+    ){
+
+      low = mid;
+
+    }else{
+
+      high = mid;
+
+    }
+
+  }
+
+
+  return high;
+
+}
+
+
+/* =========================================================
    INVEST VS LOAN
 ========================================================= */
 
@@ -2449,23 +2500,24 @@ function calculateCompare(){
   const interest =
     num("compareInterest");
 
+  const months =
+    Math.round(
+      num("compareMonths")
+    );
+
   const annualReturn =
     num("compareReturn");
 
-  const years =
-    num("compareYears");
-
-  const method =
-    document.getElementById(
-      "investmentMethod"
-    ).value;
+  const sip =
+    num("compareSIP");
 
   const lump =
     num("compareLump");
 
-
-  const months =
-    Math.round(years * 12);
+  const mode =
+    document.getElementById(
+      "compareMode"
+    ).value;
 
 
   document.getElementById("offsetInterest")
@@ -2473,247 +2525,271 @@ function calculateCompare(){
     money(interest);
 
 
+  document.getElementById("comparePeriodResult")
+    .textContent =
+    months + " months";
+
+
+  document.getElementById("startingLump")
+    .textContent =
+    money(lump);
+
+
   if(
     interest <= 0 ||
-    annualReturn <= 0 ||
     months <= 0
   ){
 
-    document.getElementById("requiredSIP")
-      .textContent = "₹0";
-
-    document.getElementById("requiredLump")
-      .textContent = "₹0";
-
-    document.getElementById("investmentGains")
-      .textContent = "₹0";
-
-    document.getElementById("sipContributions")
-      .textContent = "₹0";
-
-    document.getElementById("startingLump")
-      .textContent = money(lump);
-
-    document.getElementById("totalInvestment")
-      .textContent = money(lump);
-
-    document.getElementById("finalCorpus")
-      .textContent = money(lump);
-
-    document.getElementById("compareProfit")
-      .textContent = "₹0";
-
-    document.getElementById("netPosition")
-      .textContent =
-      money(-interest);
+    resetCompare();
 
     return;
 
   }
 
 
-  const monthlyRate =
-    annualReturn / 100 / 12;
+  /* -----------------------------------------
+     REQUIRED SIP
+  ----------------------------------------- */
 
+  if(mode === "requiredSip"){
 
-  const growth =
-    Math.pow(
-      1 + monthlyRate,
-      months
-    );
-
-
-  let requiredSIP = 0;
-  let requiredLump = 0;
-
-
-  let startingLump =
-    method === "lumpSip"
-      ? lump
-      : 0;
-
-
-  if(method === "sip"){
-
-    const sipFactor =
-      monthlyRate === 0
-        ? months
-        : (
-            growth - 1
-          ) /
-          monthlyRate;
-
-
-    requiredSIP =
-      interest /
-      sipFactor;
-
-  }else{
-
-    /*
-       For lump sum + SIP, calculate the
-       remaining amount after the lump sum.
-    */
-
-    const lumpFuture =
-      startingLump *
-      growth;
-
-    const remaining =
-      Math.max(
-        0,
-        interest - lumpFuture
+    const requiredSIP =
+      calculateRequiredSIP(
+        interest,
+        annualReturn,
+        months,
+        lump
       );
 
 
-    const sipFactor =
-      monthlyRate === 0
-        ? months
-        : (
-            growth - 1
-          ) /
-          monthlyRate;
+    document.getElementById("requiredSIP")
+      .textContent =
+      Number.isFinite(requiredSIP)
+        ? money(requiredSIP)
+        : "Not achievable";
 
 
-    requiredSIP =
-      remaining /
-      sipFactor;
+    document.getElementById("requiredReturn")
+      .textContent =
+      annualReturn.toFixed(2) + "%";
 
-    /*
-       If lump sum alone is enough,
-       show the lump sum required to offset
-       the loan interest.
-    */
 
-    requiredLump =
-      interest / growth;
+    if(
+      Number.isFinite(requiredSIP)
+    ){
+
+      const result =
+        investmentResult(
+          annualReturn,
+          months,
+          requiredSIP,
+          lump
+        );
+
+      renderCompareResult(
+        result,
+        interest
+      );
+
+    }
+
+
+    document.getElementById("compareNote")
+      .textContent =
+      "Required SIP is calculated so that investment gains alone equal the loan interest. SIP contributions are not counted as gains.";
+
+    return;
 
   }
 
 
-  const sipFactor =
-    monthlyRate === 0
-      ? months
-      : (
-          growth - 1
-        ) /
-        monthlyRate;
+  /* -----------------------------------------
+     REQUIRED RETURN
+  ----------------------------------------- */
+
+  if(mode === "requiredReturn"){
+
+    const requiredReturn =
+      calculateRequiredReturn(
+        interest,
+        sip,
+        months,
+        lump
+      );
 
 
-  const sipContributions =
-    requiredSIP * months;
+    document.getElementById("requiredSIP")
+      .textContent =
+      money(sip);
 
 
-  const totalInvestment =
-    startingLump +
-    sipContributions;
+    document.getElementById("requiredReturn")
+      .textContent =
+      Number.isFinite(requiredReturn)
+        ? requiredReturn.toFixed(2) + "%"
+        : "Not achievable";
 
 
-  const finalCorpus =
-    startingLump * growth +
-    requiredSIP * sipFactor;
+    if(
+      Number.isFinite(requiredReturn)
+    ){
+
+      const result =
+        investmentResult(
+          requiredReturn,
+          months,
+          sip,
+          lump
+        );
+
+      renderCompareResult(
+        result,
+        interest
+      );
+
+    }
 
 
-  const investmentProfit =
-    finalCorpus -
-    totalInvestment;
+    document.getElementById("compareNote")
+      .textContent =
+      "Required annual return is calculated so that investment gains from your selected SIP and lump sum equal the loan interest.";
+
+    return;
+
+  }
 
 
-  const netPosition =
-    investmentProfit -
-    interest;
+  /* -----------------------------------------
+     CURRENT INVESTMENT
+  ----------------------------------------- */
+
+  const result =
+    investmentResult(
+      annualReturn,
+      months,
+      sip,
+      lump
+    );
 
 
   document.getElementById("requiredSIP")
     .textContent =
-    money(requiredSIP);
+    money(sip);
 
-  document.getElementById("requiredLump")
-    .textContent =
-    money(requiredLump);
 
-  document.getElementById("investmentGains")
+  document.getElementById("requiredReturn")
     .textContent =
-    money(investmentProfit);
+    annualReturn.toFixed(2) + "%";
 
-  document.getElementById("sipContributions")
-    .textContent =
-    money(sipContributions);
 
-  document.getElementById("startingLump")
-    .textContent =
-    money(startingLump);
-
-  document.getElementById("totalInvestment")
-    .textContent =
-    money(totalInvestment);
-
-  document.getElementById("finalCorpus")
-    .textContent =
-    money(finalCorpus);
-
-  document.getElementById("compareProfit")
-    .textContent =
-    money(investmentProfit);
-
-  document.getElementById("netPosition")
-    .textContent =
-    money(netPosition);
+  renderCompareResult(
+    result,
+    interest
+  );
 
 
   document.getElementById("compareNote")
     .textContent =
-    "The calculation shows the investment amount and gains required to offset the selected loan interest.";
+    "Net position = investment gains minus loan interest. Principal and SIP contributions are not counted as gains.";
 
 }
 
 
 /* =========================================================
-   INVESTMENT METHOD
+   RENDER COMPARE RESULTS
 ========================================================= */
 
-function toggleInvestmentMethod(){
+function renderCompareResult(
+  result,
+  interest
+){
 
-  const method =
-    document.getElementById(
-      "investmentMethod"
-    ).value;
+  document.getElementById("sipContributions")
+    .textContent =
+    money(result.totalSip);
 
-  const field =
-    document.getElementById(
-      "compareLumpField"
+
+  document.getElementById("totalInvestment")
+    .textContent =
+    money(result.totalInvestment);
+
+
+  document.getElementById("finalCorpus")
+    .textContent =
+    money(result.finalCorpus);
+
+
+  document.getElementById("investmentGains")
+    .textContent =
+    money(result.gains);
+
+
+  document.getElementById("netPosition")
+    .textContent =
+    money(
+      result.gains -
+      interest
     );
 
+}
 
-  if(method === "lumpSip"){
 
-    field.style.display = "flex";
+function resetCompare(){
 
-  }else{
+  document.getElementById("requiredSIP")
+    .textContent =
+    "₹0";
 
-    field.style.display = "none";
+  document.getElementById("requiredReturn")
+    .textContent =
+    "0.00%";
 
-  }
+  document.getElementById("sipContributions")
+    .textContent =
+    "₹0";
+
+  document.getElementById("totalInvestment")
+    .textContent =
+    money(num("compareLump"));
+
+  document.getElementById("finalCorpus")
+    .textContent =
+    money(num("compareLump"));
+
+  document.getElementById("investmentGains")
+    .textContent =
+    "₹0";
+
+  document.getElementById("netPosition")
+    .textContent =
+    money(
+      -num("compareInterest")
+    );
 
 }
 
 
 /* =========================================================
-   RESTORE SAVED INTEREST
+   RESTORE LINKED LOAN VALUES
 ========================================================= */
 
-function restoreCompareInterest(){
+function restoreCompareValues(){
 
-  const saved =
+  const savedInterest =
     localStorage.getItem(
       "loanInterestToOffset"
     );
 
+  const savedTenure =
+    localStorage.getItem(
+      "loanTenureToCompare"
+    );
+
 
   if(
-    saved !== null &&
+    savedInterest !== null &&
     Number.isFinite(
-      parseFloat(saved)
+      parseFloat(savedInterest)
     )
   ){
 
@@ -2721,7 +2797,24 @@ function restoreCompareInterest(){
       "compareInterest"
     ).value =
       Math.round(
-        parseFloat(saved)
+        parseFloat(savedInterest)
+      );
+
+  }
+
+
+  if(
+    savedTenure !== null &&
+    Number.isFinite(
+      parseFloat(savedTenure)
+    )
+  ){
+
+    document.getElementById(
+      "compareMonths"
+    ).value =
+      Math.round(
+        parseFloat(savedTenure)
       );
 
   }
@@ -2737,7 +2830,6 @@ document.addEventListener(
   "DOMContentLoaded",
   function(){
 
-    /* Tabs */
 
     document
       .querySelectorAll(".tab")
@@ -2745,23 +2837,17 @@ document.addEventListener(
 
         tab.addEventListener(
           "click",
-          function(event){
-
-            event.preventDefault();
-            event.stopPropagation();
+          function(){
 
             showTab(
               this.dataset.tab
             );
 
-          },
-          false
+          }
         );
 
       });
 
-
-    /* Investment */
 
     document
       .getElementById(
@@ -2773,8 +2859,6 @@ document.addEventListener(
       );
 
 
-    /* Loan */
-
     document
       .getElementById(
         "calculateLoanBtn"
@@ -2784,8 +2868,6 @@ document.addEventListener(
         calculateLoan
       );
 
-
-    /* Target closure */
 
     document
       .getElementById(
@@ -2797,8 +2879,6 @@ document.addEventListener(
       );
 
 
-    /* Invest vs Loan */
-
     document
       .getElementById(
         "calculateCompareBtn"
@@ -2809,21 +2889,17 @@ document.addEventListener(
       );
 
 
-    /* Investment method */
-
     document
       .getElementById(
-        "investmentMethod"
+        "compareMode"
       )
       .addEventListener(
         "change",
-        toggleInvestmentMethod
+        calculateCompare
       );
 
 
-    restoreCompareInterest();
-
-    toggleInvestmentMethod();
+    restoreCompareValues();
 
   }
 );
@@ -2860,4 +2936,5 @@ if("serviceWorker" in navigator){
 </script>
 
 </body>
+
 </html>
