@@ -263,7 +263,7 @@ function loanSchedule(principal, annual, tenure, extraM, extraY, extraMonth,
     }
 
     // Yearly extra payment is made after the selected month's EMI.
-    if(extraY>0 && month%12===extraMonth && bal>0.01){
+    if(extraY>0 && (extraMonth===12 ? month%12===0 : month%12===extraMonth) && bal>0.01){
       const pp=Math.min(bal,extraY);
       const fee=pp*partCharge/100;
       bal-=pp;
