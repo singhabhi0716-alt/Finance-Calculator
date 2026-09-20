@@ -7,6 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="My Finance Calculators">
+<link rel="manifest" href="./manifest.webmanifest">
 <title>My Finance Calculators</title>
 <style>
 :root{
@@ -223,64 +224,151 @@ function calcMF(){
   drawChart($('mfChart'),yearData);
 }
 
-function loanSchedule(principal, annual, tenure, extraM, extraY, extraMonth, prepay, prepayAfter, chargeRate){
+function loanSchedule(principal, annual, tenure, extraM, extraY, extraMonth,
+                       prepay, prepayAfter, partCharge, closureCharge){
   const r=annual/100/12;
-  const emi=r?principal*r*Math.pow(1+r,tenure)/(Math.pow(1+r,tenure)-1):principal/tenure;
-  let bal=principal,total=0,interest=0,month=0,prepayDone=false;
+  const emi = r
+    ? principal*r*Math.pow(1+r,tenure)/(Math.pow(1+r,tenure)-1)
+    : principal/tenure;
+
+  let bal=principal;
+  let total=0;
+  let interest=0;
+  let month=0;
+  let prepayDone=false;
+  let partPaymentCharges=0;
+  let foreclosureCharge=0;
+
   while(bal>0.01 && month<600){
     month++;
+
     const interestPart=bal*r;
-    let pay=Math.min(bal+interestPart,emi+extraM);
-    bal=bal+interestPart-pay;
-    total+=pay; interest+=interestPart;
-    if(!prepayDone && prepay>0 && month>=prepayAfter && bal>0){
+    interest+=interestPart;
+
+    // Normal EMI + optional extra monthly payment.
+    const scheduledPayment=Math.min(bal+interestPart, emi+extraM);
+    bal=bal+interestPart-scheduledPayment;
+    total+=scheduledPayment;
+
+    // One-time part payment is made AFTER the selected number of EMIs.
+    if(!prepayDone && prepay>0 && month===Math.max(1,Math.round(prepayAfter))){
       const pp=Math.min(bal,prepay);
-      const fee=pp*chargeRate/100;
-      bal-=pp; total+=pp+fee; prepayDone=true;
+      if(pp>0){
+        const fee=pp*partCharge/100;
+        bal-=pp;
+        total+=pp+fee;
+        partPaymentCharges+=fee;
+      }
+      prepayDone=true;
     }
-    if(extraY>0 && month%12===extraMonth && bal>0){
+
+    // Yearly extra payment is made after the selected month's EMI.
+    if(extraY>0 && month%12===extraMonth && bal>0.01){
       const pp=Math.min(bal,extraY);
-      const fee=pp*chargeRate/100;
-      bal-=pp; total+=pp+fee;
+      const fee=pp*partCharge/100;
+      bal-=pp;
+      total+=pp+fee;
+      partPaymentCharges+=fee;
+    }
+
+    // If the loan is completely paid before the original tenure,
+    // apply the pre-closure charge to the remaining amount being closed.
+    if(bal<=0.01){
+      bal=0;
+      if(month<tenure && closureCharge>0){
+        // At this point the final scheduled payment already contains the
+        // outstanding principal, so the charge is calculated on the
+        // principal component of that final payoff.
+        const principalClosed=Math.max(0, scheduledPayment-interestPart);
+        foreclosureCharge=principalClosed*closureCharge/100;
+        total+=foreclosureCharge;
+      }
     }
   }
-  return {emi,total,interest,months:month};
+
+  return {
+    emi,
+    total,
+    interest,
+    months:month,
+    partPaymentCharges,
+    foreclosureCharge
+  };
 }
 
 function calcLoan(){
-  const p=Math.max(0,+$('principal').value||0), rate=+$('loanRate').value||0;
-  const ten=Math.max(1,+$('tenure').value||1), em=Math.max(0,+$('extraMonthly').value||0);
-  const ey=Math.max(0,+$('extraYearly').value||0), emonth=+$('extraMonth').value||12;
-  const pp=Math.max(0,+$('prepay').value||0), ppa=Math.max(0,+$('prepayAfter').value||0);
-  const pc=+$('partCharge').value||0;
-  const base=loanSchedule(p,rate,ten,0,0,12,0,0,0);
-  const cur=loanSchedule(p,rate,ten,em,ey,emonth,pp,ppa,pc);
+  const p=Math.max(0,+$('principal').value||0);
+  const rate=+$('loanRate').value||0;
+  const ten=Math.max(1,Math.round(+$('tenure').value||1));
+  const em=Math.max(0,+$('extraMonthly').value||0);
+  const ey=Math.max(0,+$('extraYearly').value||0);
+  const emonth=Math.min(12,Math.max(1,Math.round(+$('extraMonth').value||12)));
+  const pp=Math.max(0,+$('prepay').value||0);
+  const ppa=Math.max(1,Math.round(+$('prepayAfter').value||1));
+  const pc=Math.max(0,+$('partCharge').value||0);
+  const cc=Math.max(0,+$('closureCharge').value||0);
+
+  const base=loanSchedule(p,rate,ten,0,0,12,0,0,0,0);
+  const cur=loanSchedule(p,rate,ten,em,ey,emonth,pp,ppa,pc,cc);
+
   $('loanEmi').textContent=money(base.emi);
   $('loanClose').textContent=cur.months+' months';
   $('loanCloseText').textContent=Math.floor(cur.months/12)+' years '+(cur.months%12)+' months from now';
-  $('loanSaved').textContent=money(base.interest-cur.interest);
+  $('loanSaved').textContent=money(Math.max(0,base.interest-cur.interest));
   $('loanMonthsSaved').textContent=Math.max(0,base.months-cur.months);
   $('loanTotal').textContent=money(cur.total);
   $('loanRegularTotal').textContent=money(base.total);
   $('loanInterest').textContent=money(cur.interest);
-  $('loanPrepayCost').textContent=money(pp+(pp*pc/100));
+  $('loanPrepayCost').textContent=money(
+    cur.partPaymentCharges+cur.foreclosureCharge
+  );
 }
 
 function calcTarget(){
-  const p=Math.max(0,+$('principal').value||0), rate=+$('loanRate').value||0, ten=Math.max(1,+$('tenure').value||1);
-  const target=Math.max(1,(+$('targetYears').value||0)*12+(+$('targetMonths').value||0));
+  const p=Math.max(0,+$('principal').value||0);
+  const rate=+$('loanRate').value||0;
+  const ten=Math.max(1,Math.round(+$('tenure').value||1));
+  const targetRaw=(+$('targetYears').value||0)*12+(+$('targetMonths').value||0);
+  const target=Math.max(1,Math.round(targetRaw));
   const em=Math.max(0,+$('extraMonthly').value||0);
-  const pp=Math.max(0,+$('prepay').value||0), ppa=Math.max(0,+$('prepayAfter').value||0), pc=+$('partCharge').value||0;
-  const emonth=+$('extraMonth').value||12;
-  const targetMonths=Math.min(target,ten);
-  let lo=0,hi=p*2;
-  for(let i=0;i<60;i++){
-    const mid=(lo+hi)/2;
-    const s=loanSchedule(p,rate,ten,em,mid,emonth,pp,ppa,pc);
-    if(s.months<=targetMonths)hi=mid; else lo=mid;
+  const pp=Math.max(0,+$('prepay').value||0);
+  const ppa=Math.max(1,Math.round(+$('prepayAfter').value||1));
+  const pc=Math.max(0,+$('partCharge').value||0);
+  const cc=Math.max(0,+$('closureCharge').value||0);
+  const emonth=Math.min(12,Math.max(1,Math.round(+$('extraMonth').value||12)));
+
+  if(target>=ten){
+    $('requiredYearly').textContent='₹0 — already within original tenure';
+    return;
   }
+
+  // First check whether the existing monthly/prepayment plan already
+  // reaches the requested target.
+  const existing=loanSchedule(p,rate,ten,em,0,emonth,pp,ppa,pc,cc);
+  if(existing.months<=target){
+    $('requiredYearly').textContent='₹0 — current plan already meets target';
+    return;
+  }
+
+  // Find the smallest annual extra payment that closes the loan
+  // in target months or less.
+  let lo=0, hi=Math.max(p,100000);
+
+  while(loanSchedule(p,rate,ten,em,hi,emonth,pp,ppa,pc,cc).months>target && hi<p*10){
+    hi*=2;
+  }
+
+  for(let i=0;i<70;i++){
+    const mid=(lo+hi)/2;
+    const s=loanSchedule(p,rate,ten,em,mid,emonth,pp,ppa,pc,cc);
+    if(s.months<=target) hi=mid;
+    else lo=mid;
+  }
+
+  // Round UP to the nearest ₹100 so the displayed amount actually
+  // achieves the target rather than falling slightly short.
   const answer=Math.ceil(hi/100)*100;
-  $('requiredYearly').textContent=targetMonths>=ten ? '₹0 — already within original tenure' : money(answer);
+  $('requiredYearly').textContent=money(answer);
 }
 
 function drawChart(canvas,data){
@@ -310,6 +398,13 @@ $('calcTarget').addEventListener('click',calcTarget);
 ['principal','loanRate','tenure','extraMonthly','extraYearly','extraMonth','prepay','prepayAfter','partCharge'].forEach(id=>$(id).addEventListener('input',calcLoan));
 window.addEventListener('resize',calcMF);
 calcMF();calcLoan();calcTarget();
+</script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js").catch(() => {});
+  });
+}
 </script>
 </body>
 </html>
