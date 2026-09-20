@@ -1,4 +1,4 @@
-const CACHE_NAME = "finance-calculator-v4";
+const CACHE_NAME = "finance-calculator-v5";
 
 const APP_FILES = [
   "./",
@@ -69,11 +69,12 @@ self.addEventListener("fetch", event => {
 
 
   /*
-     For HTML/navigation:
-     ALWAYS try the internet first.
+     IMPORTANT:
 
-     This means when we update GitHub Pages,
-     the app can receive the new version.
+     Always use the cached version first.
+
+     This means the app continues working
+     even when there is no internet connection.
   */
 
   if (
@@ -83,36 +84,16 @@ self.addEventListener("fetch", event => {
 
     event.respondWith(
 
-      fetch(request)
-        .then(response => {
+      caches.match(request)
+        .then(cachedResponse => {
 
-          const responseClone =
-            response.clone();
+          if(cachedResponse){
 
-          caches.open(CACHE_NAME)
-            .then(cache => {
+            return cachedResponse;
 
-              cache.put(
-                request,
-                responseClone
-              );
+          }
 
-            });
-
-          return response;
-
-        })
-
-        .catch(() => {
-
-          return caches.match(
-            request
-          ).then(cached => {
-
-            return cached ||
-              caches.match("./index.html");
-
-          });
+          return fetch(request);
 
         })
 
@@ -124,8 +105,8 @@ self.addEventListener("fetch", event => {
 
 
   /*
-     For other files:
-     Try cache first, then network.
+     Other resources:
+     cache first, network as fallback.
   */
 
   event.respondWith(
