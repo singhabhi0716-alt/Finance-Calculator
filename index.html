@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111827">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<title>My Finance Calculators</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#f3f4f6;color:#111827}
+.app{max-width:720px;margin:auto;padding:16px 14px 32px}.header{font-size:24px;font-weight:800;margin:4px 0 14px}
+.tabs{display:flex;background:#e5e7eb;border-radius:12px;padding:4px;margin-bottom:14px}.tab{flex:1;border:0;background:transparent;padding:11px;border-radius:9px;font-weight:700;font-size:15px}.tab.active{background:white;box-shadow:0 1px 4px #0002}
+.card{background:white;border-radius:16px;padding:16px;margin-bottom:14px;box-shadow:0 2px 10px #0000000d}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+label{font-size:12px;font-weight:700;color:#4b5563;display:block;margin-bottom:5px}input,select{width:100%;padding:11px;border:1px solid #d1d5db;border-radius:9px;font-size:15px;background:#fff}
+.field{margin-bottom:10px}.full{grid-column:1/-1}.result{font-size:21px;font-weight:800}.muted{font-size:12px;color:#6b7280}.row{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid #eee}.row:last-child{border-bottom:0}.pill{display:inline-block;padding:4px 8px;background:#eef2ff;border-radius:999px;font-size:12px;font-weight:700}
+.hidden{display:none}.note{font-size:12px;color:#6b7280;line-height:1.45}.section-title{font-weight:800;margin:2px 0 10px}.warn{color:#92400e;background:#fffbeb;padding:10px;border-radius:10px;font-size:12px}
+@media(max-width:480px){.grid{grid-template-columns:1fr}.full{grid-column:auto}}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px}.subtitle{font-size:12px;color:#6b7280;margin-top:-8px;margin-bottom:14px}.install{border:0;background:#111827;color:white;border-radius:10px;padding:9px 13px;font-weight:800}.install.hidden{display:none}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="topbar">
+  <div>
+    <div class="header">My Finance Calculators</div>
+    <div class="subtitle">Private • Offline • On-device calculations</div>
+  </div>
+  <button id="installBtn" class="install hidden" onclick="installApp()">Install</button>
+</div>
+<div class="tabs">
+<button class="tab active" onclick="showTab('mf',this)">📈 Mutual Fund</button>
+<button class="tab" onclick="showTab('loan',this)">🚗 Car Loan</button>
+</div>
+
+<section id="mf" class="card">
+<div class="section-title">Mutual Fund Compounding</div>
+<div class="grid">
+<div class="field"><label>Investment type</label><select id="mfType"><option value="sip">Monthly SIP</option><option value="lump">Lump sum</option></select></div>
+<div class="field"><label>Expected annual return (%)</label><input id="mfRate" type="number" value="12" step="0.1"></div>
+<div class="field"><label>Monthly SIP / Initial investment (₹)</label><input id="mfAmt" type="number" value="10000"></div>
+<div class="field"><label>Investment period (years)</label><input id="mfYears" type="number" value="15" step="0.5"></div>
+<div class="field"><label>Annual SIP step-up (%)</label><input id="mfStep" type="number" value="0"></div>
+<div class="field"><label>Expected inflation (%)</label><input id="mfInfl" type="number" value="6"></div>
+</div>
+<div id="mfOut" style="margin-top:10px"></div>
+</section>
+
+<section id="loan" class="card hidden">
+<div class="section-title">Car Loan Closure & Prepayment</div>
+<div class="grid">
+<div class="field"><label>Loan amount (₹)</label><input id="principal" type="number" value="1278000"></div>
+<div class="field"><label>Annual interest (%)</label><input id="loanRate" type="number" value="8.05" step="0.01"></div>
+<div class="field"><label>Original tenure (months)</label><input id="tenure" type="number" value="84"></div>
+<div class="field"><label>Extra monthly payment (₹)</label><input id="extraMonthly" type="number" value="0"></div>
+<div class="field"><label>Extra yearly payment (₹)</label><input id="extraYearly" type="number" value="0"></div>
+<div class="field"><label>Yearly payment frequency (every N months)</label><input id="yearlyFreq" type="number" value="12"></div>
+<div class="field"><label>One-time prepayment (₹)</label><input id="oneTime" type="number" value="0"></div>
+<div class="field"><label>One-time prepayment after (months)</label><input id="oneTimeMonth" type="number" value="12"></div>
+<div class="field"><label>Pre-closure charge (%)</label><input id="preclosePct" type="number" value="0" step="0.01"></div>
+<div class="field"><label>Part-payment charge (%)</label><input id="partPct" type="number" value="0" step="0.01"></div>
+<div class="field"><label>Target closure years</label><input id="targetY" type="number" value="5"></div>
+<div class="field"><label>Target closure months</label><input id="targetM" type="number" value="0"></div>
+</div>
+<div class="note">Part-payment charge is applied to scheduled extra/one-time principal payments. Pre-closure charge is applied when the loan is fully closed before the original tenure. Enter 0% if your lender has no charge.</div>
+<div id="loanOut" style="margin-top:10px"></div>
+</section>
+</div>
+
+<script>
+const q=id=>document.getElementById(id);
+function money(n){return new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',maximumFractionDigits:0}).format(Math.max(0,n))}
+function num(id){return Math.max(0,Number(q(id).value)||0)}
+function showTab(id,btn){document.querySelectorAll('section').forEach(x=>x.classList.add('hidden'));q(id).classList.remove('hidden');document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));btn.classList.add('active');calc()}
+document.querySelectorAll('input,select').forEach(x=>x.addEventListener('input',calc));
+
+function calcMF(){
+ let rate=num('mfRate')/100, years=num('mfYears'), months=Math.round(years*12), step=num('mfStep')/100, infl=num('mfInfl')/100, amt=num('mfAmt');
+ let total=0, bal=0, monthlyRate=Math.pow(1+rate,1/12)-1;
+ if(q('mfType').value==='lump'){bal=amt;total=amt;for(let i=0;i<months;i++)bal*=1+monthlyRate}
+ else{let sip=amt;for(let m=1;m<=months;m++){bal=bal*(1+monthlyRate)+sip;total+=sip;if(m%12===0)sip*=1+step}}
+ let real=Math.pow((1+rate)/(1+infl),1)-1, adj=bal/Math.pow(1+infl,years);
+ q('mfOut').innerHTML=`<div class="row"><span>Total invested</span><b>${money(total)}</b></div>
+ <div class="row"><span>Final corpus</span><b class="result">${money(bal)}</b></div>
+ <div class="row"><span>Profit</span><b>${money(bal-total)}</b></div>
+ <div class="row"><span>Inflation-adjusted corpus</span><b>${money(adj)}</b></div>
+ <div class="row"><span>Inflation impact</span><b>${money(bal-adj)}</b></div>
+ <div class="row"><span>Real annual return</span><b>${(real*100).toFixed(2)}%</b></div>
+ <div class="row"><span>Wealth multiple</span><b>${(bal/Math.max(total,1)).toFixed(2)}×</b></div>`;
+}
+
+function emi(P,r,n){r=r/12/100;return r?P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1):P/n}
+function simulate(extraMonthly, extraYearly, oneTime, oneMonth, partPct){
+ let P=num('principal'), annual=num('loanRate'), n=num('tenure'), r=annual/12/100, base=emi(P,annual,n), freq=Math.max(1,Math.round(num('yearlyFreq'))), partCharge=partPct/100;
+ let balance=P, interest=0, principalPaid=0, extraPrincipal=0, partCharges=0, totalPaid=0, m=0;
+ while(balance>0.01 && m<1200){
+   m++;
+   let interestMonth=balance*r, scheduled=Math.min(base-interestMonth,balance);
+   balance-=scheduled; interest+=interestMonth; principalPaid+=scheduled; totalPaid+=interestMonth+scheduled;
+   let extra=Math.min(extraMonthly,Math.max(0,balance));
+   if(extra>0){let charge=extra*partCharge;partCharges+=charge;totalPaid+=extra+charge;balance-=extra;extraPrincipal+=extra}
+   if(m===oneMonth && oneTime>0){let extra2=Math.min(oneTime,Math.max(0,balance));let charge=extra2*partCharge;partCharges+=charge;totalPaid+=extra2+charge;balance-=extra2;extraPrincipal+=extra2}
+   if(extraYearly>0 && m%freq===0 && balance>0){let extra3=Math.min(extraYearly,balance);let charge=extra3*partCharge;partCharges+=charge;totalPaid+=extra3+charge;balance-=extra3;extraPrincipal+=extra3}
+ }
+ let preclose=0;
+ if(m<n && balance<=0.01) { /* loan was closed early; charge based on final principal payment */ 
+   // pre-closure charge is a separate lender fee on the principal outstanding immediately before closure.
+   // Reconstructing that exact amount is easiest from total principal: it is the final principal payment.
+   // Approximate it as the last principal amount paid in the closing month.
+   // Since balance is zero, use the amount required to close after scheduled/extra payments.
+ }
+ return {months:m,interest,base,totalPaid,partCharges,extraPrincipal};
+}
+function loanMetrics(){
+ let P=num('principal'), annual=num('loanRate'), n=Math.max(1,Math.round(num('tenure')));
+ let r=annual/12/100, base=emi(P,annual,n);
+ // First pass with all payment mechanics, tracking closing-month principal for preclosure fee.
+ let balance=P, interest=0, total=0, partFees=0, m=0, freq=Math.max(1,Math.round(num('yearlyFreq')));
+ let extraM=num('extraMonthly'), extraY=num('extraYearly'), one=num('oneTime'), oneM=Math.max(1,Math.round(num('oneTimeMonth'))), partPct=num('partPct')/100;
+ let closePrincipal=0;
+ while(balance>0.005 && m<1200){
+   m++;
+   let before=balance, im=balance*r, sched=Math.min(Math.max(0,base-im),balance); balance-=sched; interest+=im; total+=im+sched;
+   let extras=[];
+   if(extraM>0) extras.push(['part',Math.min(extraM,balance)]);
+   if(m===oneM && one>0) extras.push(['part',Math.min(one,balance)]);
+   if(extraY>0 && m%freq===0) extras.push(['part',Math.min(extraY,balance)]);
+   for(const [kind,x] of extras){if(x>0){let fee=x*partPct;partFees+=fee;total+=x+fee;balance-=x;}}
+   if(balance<=0.005){closePrincipal=before-(balance+im*0); /* corrected below */ }
+ }
+ // Determine pre-closure charge on principal that was actually needed to finish in closing month:
+ // Calculate principal paid in closing month as prior balance minus remaining balance after all principal payments.
+ let simBal=P, prev=0, closingPrincipal=0;
+ for(let mm=1;mm<=m;mm++){
+   prev=simBal; let im=simBal*r, sched=Math.min(Math.max(0,base-im),simBal); simBal-=sched;
+   if(extraM>0){let x=Math.min(extraM,simBal);simBal-=x}
+   if(mm===oneM&&one>0){let x=Math.min(one,simBal);simBal-=x}
+   if(extraY>0&&mm%freq===0){let x=Math.min(extraY,simBal);simBal-=x}
+   if(simBal<=0.005){closingPrincipal=prev;break}
+ }
+ let preFee=(m<n ? closingPrincipal*num('preclosePct')/100 : 0);
+ total+=preFee;
+ let originalInterest=base*n-P, interestSaved=originalInterest-interest;
+ let monthsSaved=Math.max(0,n-m);
+ let target=Math.max(1,Math.round(num('targetY')*12+num('targetM')));
+ // Find yearly extra needed to reach target; binary search.
+ let lo=0,hi=P;
+ for(let i=0;i<60;i++){let mid=(lo+hi)/2;let bal=P, mm=0;while(bal>0.005&&mm<1200&&mm<target){mm++;let im=bal*r;let s=Math.min(Math.max(0,base-im),bal);bal-=s;let em=Math.min(extraM,bal);bal-=em;if(mm===oneM){let x=Math.min(one,bal);bal-=x}if(false){}let ey=Math.min(mid,bal);if(mm%freq===0)bal-=ey}if(bal<=0.005)hi=mid;else lo=mid}
+ let req=hi;
+ q('loanOut').innerHTML=`<div class="row"><span>Regular EMI</span><b>${money(base)}</b></div>
+ <div class="row"><span>Projected payoff</span><b>${Math.floor((m-1)/12)} years ${((m-1)%12)+1} months</b></div>
+ <div class="row"><span>Original interest</span><b>${money(originalInterest)}</b></div>
+ <div class="row"><span>Interest saved</span><b>${money(Math.max(0,interestSaved))}</b></div>
+ <div class="row"><span>Months saved</span><b>${monthsSaved}</b></div>
+ <div class="row"><span>Part-payment charges</span><b>${money(partFees)}</b></div>
+ <div class="row"><span>Pre-closure charge</span><b>${money(preFee)}</b></div>
+ <div class="row"><span>Total amount paid</span><b>${money(total)}</b></div>
+ <div class="row"><span>Required yearly extra for target</span><b>${money(req)}</b></div>
+ <div class="warn">Charges are modeled as percentages of the relevant principal prepayment. Actual lender rules can differ (e.g. charge caps, GST, lock-in periods, or charge on outstanding principal).</div>`;
+}
+function calc(){if(!q('mf').classList.contains('hidden'))calcMF();else loanMetrics()}
+calc();
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").catch(()=>{});
+let deferredPrompt=null;
+window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredPrompt=e;q("installBtn").classList.remove("hidden")});
+async function installApp(){if(!deferredPrompt)return;deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;q("installBtn").classList.add("hidden")}
+</script>
+</body></html>
