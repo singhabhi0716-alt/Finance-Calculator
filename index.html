@@ -678,6 +678,9 @@ canvas{
 
 </style>
 
+
+<!-- FINANCE-CALCULATOR-UPDATE-NOTICE-V2 -->
+
 </head>
 
 
@@ -3310,10 +3313,6 @@ async function applyUpdate(){
     localStorage.setItem(
       "financeCalculatorInstalledVersion",
       remoteVersion
-    );
-
-    localStorage.removeItem(
-      UPDATE_DEFERRED_KEY
     );
 
     window.location.reload();
