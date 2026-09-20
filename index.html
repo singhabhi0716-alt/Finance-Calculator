@@ -10,7 +10,7 @@
 <meta name="color-scheme" content="dark">
 
 <meta name="description"
-      content="My Finance Calculators - investment, loan and invest vs loan calculators">
+      content="My Finance Calculators - Investment, Loan and Invest vs Loan calculators">
 
 <link rel="manifest" href="manifest.webmanifest">
 
@@ -19,7 +19,7 @@
 <style>
 
 /* =========================================================
-   DESIGN SYSTEM
+   DESIGN
 ========================================================= */
 
 :root{
@@ -34,11 +34,6 @@
   --danger:#ff5b67;
   --shadow:0 15px 45px rgba(0,0,0,.65);
 }
-
-
-/* =========================================================
-   BASE
-========================================================= */
 
 *{
   box-sizing:border-box;
@@ -68,7 +63,6 @@ body{
     sans-serif;
 
   -webkit-font-smoothing:antialiased;
-
   overflow-x:hidden;
 }
 
@@ -95,11 +89,6 @@ body::before{
   pointer-events:none;
   white-space:pre-wrap;
 }
-
-
-/* =========================================================
-   CONTAINER
-========================================================= */
 
 .container{
   width:min(760px,100%);
@@ -236,9 +225,7 @@ h1 span{
   font-size:12px;
 
   cursor:pointer;
-
   touch-action:manipulation;
-
   user-select:none;
 
   transition:
@@ -256,8 +243,7 @@ h1 span{
   border-color:rgba(0,232,135,.45);
 
   box-shadow:
-    0 0 20px
-    rgba(0,232,135,.08);
+    0 0 20px rgba(0,232,135,.08);
 }
 
 .tab:active{
@@ -294,11 +280,9 @@ h1 span{
     );
 
   border:1px solid var(--border);
-
   border-radius:22px;
 
   padding:20px;
-
   margin-bottom:16px;
 
   box-shadow:var(--shadow);
@@ -343,7 +327,7 @@ h1 span{
 
 
 /* =========================================================
-   GRID
+   FORM
 ========================================================= */
 
 .grid{
@@ -361,11 +345,6 @@ h1 span{
 .field.full{
   grid-column:1/-1;
 }
-
-
-/* =========================================================
-   LABELS / INPUTS
-========================================================= */
 
 label{
   font-size:12px;
@@ -457,8 +436,7 @@ button.primary{
   margin-top:17px;
 
   box-shadow:
-    0 9px 28px
-    rgba(0,232,135,.16);
+    0 9px 28px rgba(0,232,135,.16);
 
   transition:.15s ease;
 }
@@ -524,11 +502,6 @@ button.primary:active{
   font-size:23px;
 }
 
-
-/* =========================================================
-   NOTES
-========================================================= */
-
 .note{
   margin-top:13px;
 
@@ -546,14 +519,6 @@ button.primary:active{
   line-height:1.55;
 }
 
-.error{
-  color:var(--danger);
-
-  background:rgba(255,91,103,.06);
-
-  border-color:rgba(255,91,103,.25);
-}
-
 
 /* =========================================================
    CHART
@@ -567,7 +532,7 @@ canvas{
 
 
 /* =========================================================
-   RESPONSIVE
+   MOBILE
 ========================================================= */
 
 @media(max-width:560px){
@@ -631,13 +596,15 @@ canvas{
 <div class="container">
 
 
+<!-- =======================================================
+     HEADER
+======================================================= -->
+
 <header class="header">
 
   <div class="brand">
 
-    <div class="brand-icon">
-      ₹
-    </div>
+    <div class="brand-icon">₹</div>
 
     <div class="brand-text">
       PERSONAL <span>FINANCE</span>
@@ -654,11 +621,9 @@ canvas{
   </p>
 
   <div class="private">
-
     <span>🔒 Private</span>
     <span>⌁ Offline</span>
     <span>▣ On-device</span>
-
   </div>
 
 </header>
@@ -674,27 +639,21 @@ canvas{
     type="button"
     class="tab active"
     data-tab="investment">
-
     Investment
-
   </button>
 
   <button
     type="button"
     class="tab"
     data-tab="loan">
-
     Loan
-
   </button>
 
   <button
     type="button"
     class="tab"
     data-tab="compare">
-
     Invest vs Loan
-
   </button>
 
 </div>
@@ -831,9 +790,7 @@ canvas{
         <div
           class="value"
           id="invInvested">
-
           ₹0
-
         </div>
 
       </div>
@@ -848,9 +805,7 @@ canvas{
         <div
           class="value"
           id="invCorpus">
-
           ₹0
-
         </div>
 
       </div>
@@ -865,9 +820,7 @@ canvas{
         <div
           class="value"
           id="invProfit">
-
           ₹0
-
         </div>
 
       </div>
@@ -882,9 +835,7 @@ canvas{
         <div
           class="value"
           id="wealthMultiple">
-
           0.00×
-
         </div>
 
       </div>
@@ -899,9 +850,7 @@ canvas{
         <div
           class="value"
           id="realCorpus">
-
           ₹0
-
         </div>
 
       </div>
@@ -916,9 +865,7 @@ canvas{
         <div
           class="value"
           id="inflationImpact">
-
           ₹0
-
         </div>
 
       </div>
@@ -933,9 +880,7 @@ canvas{
         <div
           class="value"
           id="realReturn">
-
           0.00%
-
         </div>
 
       </div>
@@ -1099,9 +1044,7 @@ canvas{
 
       <div class="field">
 
-        <label>
-          Preclosure / Part-payment Charges (%)
-        </label>
+        <label>Preclosure / Part-payment Charges (%)</label>
 
         <input
           id="prepayCharge"
@@ -1145,9 +1088,7 @@ canvas{
         <div
           class="value"
           id="loanEMI">
-
           ₹0
-
         </div>
 
       </div>
@@ -1162,9 +1103,7 @@ canvas{
         <div
           class="value"
           id="originalInterest">
-
           ₹0
-
         </div>
 
       </div>
@@ -1179,9 +1118,7 @@ canvas{
         <div
           class="value"
           id="originalTotal">
-
           ₹0
-
         </div>
 
       </div>
@@ -1209,9 +1146,7 @@ canvas{
         <div
           class="value"
           id="newClosure">
-
           0 months
-
         </div>
 
       </div>
@@ -1226,9 +1161,7 @@ canvas{
         <div
           class="value"
           id="newInterest">
-
           ₹0
-
         </div>
 
       </div>
@@ -1243,9 +1176,7 @@ canvas{
         <div
           class="value"
           id="interestSaved">
-
           ₹0
-
         </div>
 
       </div>
@@ -1260,9 +1191,7 @@ canvas{
         <div
           class="value"
           id="monthsSaved">
-
           0
-
         </div>
 
       </div>
@@ -1277,9 +1206,7 @@ canvas{
         <div
           class="value"
           id="newTotal">
-
           ₹0
-
         </div>
 
       </div>
@@ -1338,9 +1265,7 @@ canvas{
         <div
           class="value"
           id="requiredYearly">
-
           ₹0
-
         </div>
 
       </div>
@@ -1350,8 +1275,9 @@ canvas{
 
     <div class="note">
 
-      This assumes the extra payment is made once every year
-      in the selected payment month.
+      The calculation uses the yearly payment month selected
+      above. If "None" is selected, yearly extra payment is
+      not applied.
 
     </div>
 
@@ -1378,8 +1304,8 @@ canvas{
 
     <div class="note">
 
-      Compare the investment gains required to offset
-      your loan interest.
+      Compare investment gains against the loan interest
+      you want to offset.
 
     </div>
 
@@ -1517,9 +1443,7 @@ canvas{
         <div
           class="value"
           id="offsetInterest">
-
           ₹0
-
         </div>
 
       </div>
@@ -1534,9 +1458,7 @@ canvas{
         <div
           class="value"
           id="requiredSIP">
-
           ₹0
-
         </div>
 
       </div>
@@ -1551,9 +1473,7 @@ canvas{
         <div
           class="value"
           id="requiredLump">
-
           ₹0
-
         </div>
 
       </div>
@@ -1568,9 +1488,7 @@ canvas{
         <div
           class="value"
           id="investmentGains">
-
           ₹0
-
         </div>
 
       </div>
@@ -1585,9 +1503,7 @@ canvas{
         <div
           class="value"
           id="sipContributions">
-
           ₹0
-
         </div>
 
       </div>
@@ -1602,9 +1518,7 @@ canvas{
         <div
           class="value"
           id="startingLump">
-
           ₹0
-
         </div>
 
       </div>
@@ -1619,9 +1533,7 @@ canvas{
         <div
           class="value"
           id="totalInvestment">
-
           ₹0
-
         </div>
 
       </div>
@@ -1636,9 +1548,7 @@ canvas{
         <div
           class="value"
           id="finalCorpus">
-
           ₹0
-
         </div>
 
       </div>
@@ -1653,9 +1563,7 @@ canvas{
         <div
           class="value"
           id="compareProfit">
-
           ₹0
-
         </div>
 
       </div>
@@ -1670,9 +1578,7 @@ canvas{
         <div
           class="value"
           id="netPosition">
-
           ₹0
-
         </div>
 
       </div>
@@ -1741,8 +1647,7 @@ function num(id){
 
 
 /* =========================================================
-   TAB NAVIGATION
-   IMPORTANT: NO INLINE ONCLICK
+   TABS
 ========================================================= */
 
 function showTab(id){
@@ -1775,16 +1680,12 @@ function showTab(id){
 
 
   if(panel){
-
     panel.classList.add("active");
-
   }
 
 
   if(tab){
-
     tab.classList.add("active");
-
   }
 
 
@@ -1820,19 +1721,14 @@ function calculateInvestment(){
 
   if(months > 0){
 
-    for(
-      let m=1;
-      m<=months;
-      m++
-    ){
+    for(let m=1; m<=months; m++){
 
       const monthlyRate =
         annual / 100 / 12;
 
       balance =
         balance *
-        (1 + monthlyRate)
-        +
+        (1 + monthlyRate) +
         currentSip;
 
       invested += currentSip;
@@ -1953,13 +1849,7 @@ function drawInvestmentChart(data){
   const w = canvas.width;
   const h = canvas.height;
 
-
-  ctx.clearRect(
-    0,
-    0,
-    w,
-    h
-  );
+  ctx.clearRect(0,0,w,h);
 
 
   if(!data.length){
@@ -1980,7 +1870,6 @@ function drawInvestmentChart(data){
 
   const pad = 35;
 
-
   const max =
     Math.max(
       ...data.map(x => x.value),
@@ -1994,11 +1883,7 @@ function drawInvestmentChart(data){
   ctx.lineWidth = 1;
 
 
-  for(
-    let i=0;
-    i<4;
-    i++
-  ){
+  for(let i=0; i<4; i++){
 
     const y =
       pad +
@@ -2025,50 +1910,37 @@ function drawInvestmentChart(data){
   ctx.beginPath();
 
 
-  data.forEach(
-    (item,index) => {
+  data.forEach((item,index) => {
 
-      const x =
-        pad +
-        (w-pad*2) *
-        (
-          index /
-          Math.max(
-            data.length-1,
-            1
-          )
-        );
+    const x =
+      pad +
+      (w-pad*2) *
+      (
+        index /
+        Math.max(data.length-1,1)
+      );
 
 
-      const y =
-        h-pad -
-        (item.value/max) *
-        (h-pad*2);
+    const y =
+      h-pad -
+      (item.value/max) *
+      (h-pad*2);
 
 
-      if(index === 0){
+    if(index === 0){
 
-        ctx.moveTo(
-          x,
-          y
-        );
+      ctx.moveTo(x,y);
 
-      }else{
+    }else{
 
-        ctx.lineTo(
-          x,
-          y
-        );
-
-      }
+      ctx.lineTo(x,y);
 
     }
-  );
+
+  });
 
 
-  ctx.strokeStyle =
-    "#00e887";
-
+  ctx.strokeStyle = "#00e887";
   ctx.lineWidth = 3;
 
   ctx.stroke();
@@ -2077,7 +1949,7 @@ function drawInvestmentChart(data){
 
 
 /* =========================================================
-   LOAN EMI
+   EMI
 ========================================================= */
 
 function calculateEMI(
@@ -2110,16 +1982,10 @@ function calculateEMI(
   return (
     principal *
     r *
-    Math.pow(
-      1+r,
-      months
-    )
+    Math.pow(1+r,months)
   ) /
   (
-    Math.pow(
-      1+r,
-      months
-    ) - 1
+    Math.pow(1+r,months) - 1
   );
 
 }
@@ -2202,10 +2068,15 @@ function simulateLoan(
 
 
     interest += interestPart;
+
     balance += interestPart;
+
     balance -= payment;
+
     total += payment;
 
+
+    /* Extra monthly */
 
     if(
       extraMonthly > 0 &&
@@ -2223,6 +2094,8 @@ function simulateLoan(
 
     }
 
+
+    /* Extra yearly */
 
     if(
       yearlyMonth > 0 &&
@@ -2242,6 +2115,8 @@ function simulateLoan(
 
     }
 
+
+    /* One-time prepayment */
 
     if(
       oneTimePrepay > 0 &&
@@ -2275,7 +2150,10 @@ function simulateLoan(
     }
 
 
-    if(month > months && balance <= 0){
+    if(
+      month > months &&
+      balance <= 0
+    ){
 
       break;
 
@@ -2423,9 +2301,7 @@ function calculateLoan(){
     money(simulated.total);
 
 
-  /* =======================================================
-     LINK LOAN INTEREST → INVEST VS LOAN
-  ======================================================= */
+  /* Loan → Invest vs Loan */
 
   const compareInterest =
     document.getElementById(
@@ -2466,6 +2342,15 @@ function calculateTarget(){
   const target =
     num("targetMonths");
 
+  /*
+     IMPORTANT:
+     Use the user's selected yearly payment month.
+  */
+
+  const yearlyMonth =
+    num("extraMonth");
+
+
   if(
     principal <= 0 ||
     tenure <= 0 ||
@@ -2490,27 +2375,32 @@ function calculateTarget(){
   }
 
 
-  const emi =
-    calculateEMI(
-      principal,
-      rate,
-      tenure
-    );
+  /*
+     If no yearly payment month is selected,
+     target closure cannot be achieved using
+     yearly extra payments.
+  */
 
+  if(yearlyMonth === 0){
 
-  const monthlyRate =
-    rate / 100 / 12;
+    document.getElementById("requiredYearly")
+      .textContent = "Select a payment month";
+
+    return;
+
+  }
 
 
   let low = 0;
   let high = principal;
 
 
-  for(
-    let i=0;
-    i<60;
-    i++
-  ){
+  /*
+     Binary search for the yearly payment
+     required to reach the target closure.
+  */
+
+  for(let i=0; i<70; i++){
 
     const extraYearly =
       (low + high) / 2;
@@ -2523,7 +2413,7 @@ function calculateTarget(){
         tenure,
         0,
         extraYearly,
-        12,
+        yearlyMonth,
         0,
         0,
         0
@@ -2614,7 +2504,8 @@ function calculateCompare(){
       .textContent = "₹0";
 
     document.getElementById("netPosition")
-      .textContent = money(-interest);
+      .textContent =
+      money(-interest);
 
     return;
 
@@ -2636,36 +2527,33 @@ function calculateCompare(){
   let requiredLump = 0;
 
 
-  if(method === "sip"){
-
-    const sipFactor =
-      (
-        growth - 1
-      ) /
-      monthlyRate;
-
-
-    requiredSIP =
-      interest /
-      sipFactor;
-
-
-  }else{
-
-    requiredLump =
-      interest /
-      growth;
-
-  }
-
-
   let startingLump =
     method === "lumpSip"
       ? lump
       : 0;
 
 
-  if(method === "lumpSip"){
+  if(method === "sip"){
+
+    const sipFactor =
+      monthlyRate === 0
+        ? months
+        : (
+            growth - 1
+          ) /
+          monthlyRate;
+
+
+    requiredSIP =
+      interest /
+      sipFactor;
+
+  }else{
+
+    /*
+       For lump sum + SIP, calculate the
+       remaining amount after the lump sum.
+    */
 
     const lumpFuture =
       startingLump *
@@ -2679,17 +2567,37 @@ function calculateCompare(){
 
 
     const sipFactor =
-      (
-        growth - 1
-      ) /
-      monthlyRate;
+      monthlyRate === 0
+        ? months
+        : (
+            growth - 1
+          ) /
+          monthlyRate;
 
 
     requiredSIP =
       remaining /
       sipFactor;
 
+    /*
+       If lump sum alone is enough,
+       show the lump sum required to offset
+       the loan interest.
+    */
+
+    requiredLump =
+      interest / growth;
+
   }
+
+
+  const sipFactor =
+    monthlyRate === 0
+      ? months
+      : (
+          growth - 1
+        ) /
+        monthlyRate;
 
 
   const sipContributions =
@@ -2703,13 +2611,7 @@ function calculateCompare(){
 
   const finalCorpus =
     startingLump * growth +
-    sipContributions *
-    (
-      (
-        growth - 1
-      ) /
-      monthlyRate
-    );
+    requiredSIP * sipFactor;
 
 
   const investmentProfit =
@@ -2797,7 +2699,7 @@ function toggleInvestmentMethod(){
 
 
 /* =========================================================
-   RESTORE SAVED LOAN INTEREST
+   RESTORE SAVED INTEREST
 ========================================================= */
 
 function restoreCompareInterest(){
@@ -2883,7 +2785,7 @@ document.addEventListener(
       );
 
 
-    /* Target */
+    /* Target closure */
 
     document
       .getElementById(
@@ -2895,7 +2797,7 @@ document.addEventListener(
       );
 
 
-    /* Compare */
+    /* Invest vs Loan */
 
     document
       .getElementById(
