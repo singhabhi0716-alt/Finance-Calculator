@@ -2,190 +2,570 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#f6faf7">
-<meta name="description" content="My Finance Calculators - investment, loan and invest vs loan calculators">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1,viewport-fit=cover"
+>
+
+<meta name="theme-color" content="#000000">
+<meta name="color-scheme" content="dark">
+
+<meta
+  name="description"
+  content="My Finance Calculators - investment, loan and invest vs loan calculators"
+>
+
 <link rel="manifest" href="manifest.webmanifest">
+
 <title>My Finance Calculators</title>
 
 <style>
+
+/* =========================================================
+   DESIGN SYSTEM
+========================================================= */
+
 :root{
-  --bg:#f5f8f6;
-  --card:#ffffff;
-  --text:#17211b;
-  --muted:#718078;
-  --green:#16834b;
-  --green2:#0f6d3d;
-  --green-soft:#e8f6ee;
-  --border:#e3ebe6;
-  --shadow:0 8px 28px rgba(23,50,35,.07);
-  --danger:#c94b4b;
+  --bg:#000000;
+  --bg2:#050807;
+
+  --card:#080d0b;
+  --card2:#0c1310;
+
+  --text:#f4f7f5;
+  --muted:#8d9a94;
+  --muted2:#68766f;
+
+  --green:#00e887;
+  --green2:#00c975;
+
+  --green-soft:rgba(0,232,135,.09);
+  --green-glow:rgba(0,232,135,.20);
+
+  --border:rgba(255,255,255,.12);
+  --border-green:rgba(0,232,135,.42);
+
+  --danger:#ff5b67;
+
+  --shadow:
+    0 15px 45px rgba(0,0,0,.65);
 }
 
-*{box-sizing:border-box}
+
+/* =========================================================
+   BASE
+========================================================= */
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  background:#000;
+}
 
 body{
   margin:0;
-  background:var(--bg);
+  min-height:100dvh;
+
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+
+  background:#000;
   color:var(--text);
-  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
   -webkit-font-smoothing:antialiased;
+
+  overflow-x:hidden;
 }
+
+
+/* =========================================================
+   SUBTLE RUPEE BACKGROUND
+========================================================= */
+
+body::before{
+  content:
+    "₹      ₹          ₹      ₹\A"
+    "    ₹       ₹          ₹\A"
+    "₹          ₹      ₹       ₹\A"
+    "    ₹          ₹      ₹";
+
+  position:fixed;
+
+  inset:-10%;
+
+  z-index:-2;
+
+  font-size:105px;
+  line-height:2.2;
+  letter-spacing:25px;
+
+  color:rgba(0,232,135,.035);
+
+  transform:rotate(-12deg);
+
+  pointer-events:none;
+
+  white-space:pre-wrap;
+}
+
+
+/* =========================================================
+   MAIN CONTAINER
+========================================================= */
 
 .container{
   width:min(760px,100%);
+
   margin:auto;
-  padding:22px 16px 40px;
+
+  padding:
+    22px
+    16px
+    calc(45px + env(safe-area-inset-bottom,0px));
 }
+
+
+/* =========================================================
+   HEADER
+========================================================= */
 
 .header{
   margin-bottom:20px;
 }
 
-.badge{
-  display:inline-flex;
+.brand{
+  display:flex;
   align-items:center;
-  padding:6px 10px;
-  border-radius:999px;
-  background:var(--green-soft);
-  color:var(--green2);
-  font-size:12px;
-  font-weight:700;
-  margin-bottom:12px;
+  gap:10px;
+
+  margin-bottom:14px;
+}
+
+.brand-icon{
+  width:38px;
+  height:38px;
+
+  border-radius:10px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  background:rgba(0,232,135,.08);
+
+  border:1px solid rgba(0,232,135,.25);
+
+  color:var(--green);
+
+  font-size:22px;
+
+  box-shadow:
+    0 0 25px rgba(0,232,135,.08);
+}
+
+.brand-text{
+  font-size:13px;
+  font-weight:850;
+
+  letter-spacing:.4px;
+
+  color:var(--green);
+}
+
+.brand-text span{
+  color:#fff;
 }
 
 h1{
   margin:0;
-  font-size:30px;
-  line-height:1.15;
-  letter-spacing:-.8px;
+
+  font-size:32px;
+
+  line-height:1.1;
+
+  letter-spacing:-1px;
+}
+
+h1 span{
+  color:var(--green);
 }
 
 .subtitle{
-  margin:8px 0 0;
-  color:var(--muted);
+  margin:9px 0 0;
+
+  color:#9aa7a1;
+
   font-size:14px;
+
   line-height:1.5;
 }
 
 .private{
-  margin-top:10px;
+  display:flex;
+  gap:18px;
+
+  margin-top:14px;
+
   font-size:12px;
-  color:#849088;
+
+  color:#89968f;
 }
 
+.private span{
+  white-space:nowrap;
+}
+
+
+/* =========================================================
+   TABS
+========================================================= */
+
 .tabs{
+  position:sticky;
+
+  top:env(safe-area-inset-top,0px);
+
+  z-index:20;
+
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:6px;
-  padding:5px;
-  background:#eaf0ec;
-  border-radius:14px;
-  margin-bottom:16px;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap:4px;
+
+  padding:4px;
+
+  margin-bottom:18px;
+
+  background:
+    rgba(5,8,7,.94);
+
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+
+  border:1px solid var(--border);
+
+  border-radius:16px;
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,.45);
 }
 
 .tab{
   border:0;
+
   background:transparent;
-  color:#607067;
-  padding:11px 7px;
-  border-radius:10px;
-  font-weight:700;
-  font-size:13px;
+
+  color:#87938d;
+
+  padding:13px 6px;
+
+  border-radius:12px;
+
+  font-weight:750;
+
+  font-size:12px;
+
   cursor:pointer;
+
+  transition:.2s ease;
 }
 
 .tab.active{
-  background:white;
-  color:var(--green2);
-  box-shadow:0 2px 8px rgba(0,0,0,.06);
+  color:var(--green);
+
+  background:
+    rgba(0,232,135,.09);
+
+  border:1px solid
+    rgba(0,232,135,.45);
+
+  box-shadow:
+    0 0 20px
+    rgba(0,232,135,.08);
 }
 
-.panel{display:none}
-.panel.active{display:block}
+.tab:active{
+  transform:scale(.98);
+}
+
+
+/* =========================================================
+   PANELS
+========================================================= */
+
+.panel{
+  display:none;
+}
+
+.panel.active{
+  display:block;
+}
+
+
+/* =========================================================
+   CARDS
+========================================================= */
 
 .card{
-  background:var(--card);
+  position:relative;
+
+  overflow:hidden;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(13,22,18,.96),
+      rgba(4,7,6,.98)
+    );
+
   border:1px solid var(--border);
-  border-radius:20px;
-  padding:18px;
-  margin-bottom:14px;
+
+  border-radius:22px;
+
+  padding:20px;
+
+  margin-bottom:16px;
+
   box-shadow:var(--shadow);
 }
 
-.card-title{
-  font-size:16px;
-  font-weight:800;
-  margin-bottom:14px;
+.card::before{
+  content:"";
+
+  position:absolute;
+
+  top:0;
+  left:8%;
+
+  width:35%;
+  height:1px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      var(--green),
+      transparent
+    );
+
+  opacity:.7;
 }
+
+.card-title{
+  display:flex;
+  align-items:center;
+  gap:9px;
+
+  font-size:18px;
+
+  font-weight:850;
+
+  margin-bottom:17px;
+}
+
+.card-title-icon{
+  color:var(--green);
+
+  font-size:20px;
+}
+
+
+/* =========================================================
+   GRID
+========================================================= */
 
 .grid{
   display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap:14px;
 }
 
 .field{
   display:flex;
+
   flex-direction:column;
-  gap:6px;
+
+  gap:7px;
 }
 
 .field.full{
   grid-column:1/-1;
 }
 
+
+/* =========================================================
+   LABELS
+========================================================= */
+
 label{
   font-size:12px;
-  color:#68756d;
+
+  color:#a2aea8;
+
   font-weight:700;
 }
 
-input,select{
+
+/* =========================================================
+   INPUTS
+========================================================= */
+
+input,
+select{
   width:100%;
-  height:46px;
-  border:1px solid #dbe5df;
-  border-radius:12px;
-  background:#fbfdfc;
-  padding:0 12px;
+
+  height:50px;
+
+  border:1px solid
+    rgba(255,255,255,.14);
+
+  border-radius:14px;
+
+  background:
+    rgba(255,255,255,.025);
+
+  padding:0 14px;
+
   font-size:15px;
+
   color:var(--text);
+
   outline:none;
+
+  transition:.2s ease;
+
+  -webkit-appearance:none;
 }
 
-input:focus,select:focus{
-  border-color:#6bc193;
-  box-shadow:0 0 0 3px rgba(22,131,75,.08);
+input:focus,
+select:focus{
+  border-color:var(--green);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(0,232,135,.07),
+    0 0 20px
+    rgba(0,232,135,.04);
 }
+
+input::placeholder{
+  color:#59645f;
+}
+
+select{
+  cursor:pointer;
+}
+
+
+/* =========================================================
+   SMALL HELPER TEXT
+========================================================= */
+
+.small{
+  font-size:10px;
+
+  line-height:1.4;
+
+  color:#728079;
+
+  margin-top:1px;
+}
+
+.auto-note{
+  color:var(--green);
+
+  font-size:10px;
+
+  line-height:1.4;
+
+  margin-top:1px;
+}
+
+
+/* =========================================================
+   BUTTON
+========================================================= */
 
 button.primary{
   width:100%;
-  height:48px;
-  border:0;
-  border-radius:13px;
-  background:var(--green);
-  color:white;
-  font-weight:800;
+
+  height:52px;
+
+  border:1px solid
+    rgba(0,232,135,.75);
+
+  border-radius:15px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #00bd70,
+      #00e887
+    );
+
+  color:#00140b;
+
+  font-weight:850;
+
   font-size:15px;
+
   cursor:pointer;
-  margin-top:14px;
+
+  margin-top:17px;
+
+  box-shadow:
+    0 9px 28px
+    rgba(0,232,135,.16);
+
+  transition:.2s ease;
 }
 
 button.primary:active{
-  transform:scale(.99);
+  transform:scale(.985);
 }
+
+
+/* =========================================================
+   RESULTS
+========================================================= */
 
 .results{
   display:grid;
-  grid-template-columns:1fr 1fr;
+
+  grid-template-columns:
+    1fr 1fr;
+
   gap:10px;
 }
 
 .result{
-  padding:14px;
-  background:#f8fbf9;
-  border:1px solid var(--border);
-  border-radius:14px;
+  min-width:0;
+
+  padding:15px;
+
+  background:
+    rgba(255,255,255,.025);
+
+  border:1px solid
+    rgba(255,255,255,.09);
+
+  border-radius:16px;
 }
 
 .result.full{
@@ -193,63 +573,111 @@ button.primary:active{
 }
 
 .result .label{
-  color:#75827a;
-  font-size:11px;
-  font-weight:700;
-  margin-bottom:5px;
+  color:#7f8d86;
+
+  font-size:10px;
+
+  font-weight:750;
+
+  margin-bottom:6px;
 }
 
 .result .value{
   font-size:18px;
+
   font-weight:850;
+
   letter-spacing:-.3px;
+
+  overflow-wrap:anywhere;
 }
 
 .result.highlight{
-  background:var(--green-soft);
-  border-color:#cdebd9;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(0,232,135,.10),
+      rgba(0,232,135,.035)
+    );
+
+  border-color:
+    rgba(0,232,135,.30);
+
+  box-shadow:
+    inset 0 0 25px
+    rgba(0,232,135,.025);
 }
 
 .result.highlight .value{
-  color:var(--green2);
-  font-size:22px;
+  color:var(--green);
+
+  font-size:23px;
 }
 
+
+/* =========================================================
+   NOTE
+========================================================= */
+
 .note{
-  margin-top:12px;
-  padding:11px 12px;
-  border-radius:12px;
-  background:#f6f8f7;
-  color:#6d7972;
-  font-size:12px;
-  line-height:1.5;
+  margin-top:13px;
+
+  padding:12px 13px;
+
+  border-radius:13px;
+
+  background:
+    rgba(255,255,255,.025);
+
+  border:1px solid
+    rgba(255,255,255,.07);
+
+  color:#75827b;
+
+  font-size:11px;
+
+  line-height:1.55;
 }
 
 .error{
   color:var(--danger);
-  background:#fff3f3;
-  border:1px solid #f1d1d1;
+
+  background:
+    rgba(255,91,103,.06);
+
+  border-color:
+    rgba(255,91,103,.25);
 }
+
+
+/* =========================================================
+   CHART
+========================================================= */
 
 canvas{
   width:100%;
+
   height:240px;
+
   display:block;
 }
 
-.small{
-  font-size:11px;
-  color:#89948d;
-  margin-top:8px;
-}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
 
 @media(max-width:560px){
+
   .container{
-    padding:18px 12px 30px;
+    padding:
+      18px
+      12px
+      calc(35px + env(safe-area-inset-bottom,0px));
   }
 
   h1{
-    font-size:27px;
+    font-size:29px;
   }
 
   .grid{
@@ -264,17 +692,16 @@ canvas{
     grid-template-columns:1fr 1fr;
   }
 
-  .tabs{
-    position:sticky;
-    top:0;
-    z-index:10;
+  .tab{
+    font-size:11px;
+
+    padding-left:4px;
+    padding-right:4px;
   }
+
 }
 
 @media(max-width:380px){
-  .tab{
-    font-size:11px;
-  }
 
   .results{
     grid-template-columns:1fr;
@@ -283,277 +710,811 @@ canvas{
   .result.full{
     grid-column:auto;
   }
+
+  .private{
+    gap:10px;
+
+    font-size:11px;
+  }
+
+  h1{
+    font-size:27px;
+  }
 }
+
 </style>
 </head>
+
 
 <body>
 
 <div class="container">
 
+
+<!-- =======================================================
+     HEADER
+======================================================= -->
+
 <header class="header">
-  <div class="badge">PERSONAL FINANCE</div>
-  <h1>My Finance Calculators</h1>
-  <p class="subtitle">Plan better. Build bigger. Your numbers, your future.</p>
-  <div class="private">🔒 Private • Offline • On-device</div>
+
+  <div class="brand">
+
+    <div class="brand-icon">
+      ₹
+    </div>
+
+    <div class="brand-text">
+      PERSONAL <span>FINANCE</span>
+    </div>
+
+  </div>
+
+  <h1>
+    My Finance <span>Calculators</span>
+  </h1>
+
+  <p class="subtitle">
+    Your numbers. Your decisions. A brighter future.
+  </p>
+
+  <div class="private">
+
+    <span>🔒 Private</span>
+
+    <span>⌁ Offline</span>
+
+    <span>▣ On-device</span>
+
+  </div>
+
 </header>
 
+
+<!-- =======================================================
+     TABS
+======================================================= -->
+
 <div class="tabs">
-  <button class="tab active" onclick="showTab('investment',this)">Investment</button>
-  <button class="tab" onclick="showTab('loan',this)">Loan</button>
-  <button class="tab" onclick="showTab('compare',this)">Invest vs Loan</button>
+
+  <button
+    class="tab active"
+    onclick="showTab('investment',this)"
+  >
+    Investment
+  </button>
+
+  <button
+    class="tab"
+    onclick="showTab('loan',this)"
+  >
+    Loan
+  </button>
+
+  <button
+    class="tab"
+    onclick="showTab('compare',this)"
+  >
+    Invest vs Loan
+  </button>
+
 </div>
 
 
-<!-- ================= INVESTMENT ================= -->
+<!-- =======================================================
+     INVESTMENT
+======================================================= -->
 
-<section id="investment" class="panel active">
+<section
+  id="investment"
+  class="panel active"
+>
 
 <div class="card">
-  <div class="card-title">Investment Inputs</div>
+
+  <div class="card-title">
+    <span class="card-title-icon">📈</span>
+    Investment Inputs
+  </div>
 
   <div class="grid">
 
     <div class="field">
-      <label>Monthly SIP (₹)</label>
-      <input id="sip" type="number" value="0" min="0">
+
+      <label>
+        Monthly SIP (₹)
+      </label>
+
+      <input
+        id="sip"
+        type="number"
+        value="0"
+        min="0"
+      >
+
     </div>
 
-    <div class="field">
-      <label>Lump Sum (₹)</label>
-      <input id="lump" type="number" value="0" min="0">
-    </div>
 
     <div class="field">
-      <label>Expected Annual Return (%)</label>
-      <input id="returnRate" type="number" value="0" min="0" step="0.1">
+
+      <label>
+        Lump Sum (₹)
+      </label>
+
+      <input
+        id="lump"
+        type="number"
+        value="0"
+        min="0"
+      >
+
     </div>
 
-    <div class="field">
-      <label>Investment Period (Years)</label>
-      <input id="years" type="number" value="0" min="0" step="0.5">
-    </div>
 
     <div class="field">
-      <label>Annual SIP Step-up (%)</label>
-      <input id="stepup" type="number" value="0" min="0" step="0.1">
+
+      <label>
+        Expected Annual Return (%)
+      </label>
+
+      <input
+        id="returnRate"
+        type="number"
+        value="0"
+        min="0"
+        step="0.1"
+      >
+
     </div>
 
+
     <div class="field">
-      <label>Inflation (%)</label>
-      <input id="inflation" type="number" value="0" min="0" step="0.1">
+
+      <label>
+        Investment Period (Years)
+      </label>
+
+      <input
+        id="years"
+        type="number"
+        value="0"
+        min="0"
+        step="0.5"
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        Annual SIP Step-up (%)
+      </label>
+
+      <input
+        id="stepup"
+        type="number"
+        value="0"
+        min="0"
+        step="0.1"
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        Inflation (%)
+      </label>
+
+      <input
+        id="inflation"
+        type="number"
+        value="0"
+        min="0"
+        step="0.1"
+      >
+
     </div>
 
   </div>
 
-  <button class="primary" onclick="calculateInvestment()">Calculate Investment</button>
+
+  <button
+    class="primary"
+    onclick="calculateInvestment()"
+  >
+    Calculate Investment →
+  </button>
+
 </div>
 
+
 <div class="card">
-  <div class="card-title">Investment Summary</div>
+
+  <div class="card-title">
+    <span class="card-title-icon">💰</span>
+    Investment Summary
+  </div>
+
 
   <div class="results">
 
     <div class="result">
-      <div class="label">Total Invested</div>
-      <div class="value" id="invInvested">₹0</div>
+
+      <div class="label">
+        Total Invested
+      </div>
+
+      <div
+        class="value"
+        id="invInvested"
+      >
+        ₹0
+      </div>
+
     </div>
+
 
     <div class="result highlight">
-      <div class="label">Final Corpus</div>
-      <div class="value" id="invCorpus">₹0</div>
+
+      <div class="label">
+        Final Corpus
+      </div>
+
+      <div
+        class="value"
+        id="invCorpus"
+      >
+        ₹0
+      </div>
+
     </div>
 
-    <div class="result">
-      <div class="label">Profit</div>
-      <div class="value" id="invProfit">₹0</div>
-    </div>
 
     <div class="result">
-      <div class="label">Wealth Multiple</div>
-      <div class="value" id="wealthMultiple">0.00×</div>
+
+      <div class="label">
+        Profit
+      </div>
+
+      <div
+        class="value"
+        id="invProfit"
+      >
+        ₹0
+      </div>
+
     </div>
 
-    <div class="result">
-      <div class="label">Inflation-adjusted Corpus</div>
-      <div class="value" id="realCorpus">₹0</div>
-    </div>
 
     <div class="result">
-      <div class="label">Inflation Impact</div>
-      <div class="value" id="inflationImpact">₹0</div>
+
+      <div class="label">
+        Wealth Multiple
+      </div>
+
+      <div
+        class="value"
+        id="wealthMultiple"
+      >
+        0.00×
+      </div>
+
     </div>
+
+
+    <div class="result">
+
+      <div class="label">
+        Inflation-adjusted Corpus
+      </div>
+
+      <div
+        class="value"
+        id="realCorpus"
+      >
+        ₹0
+      </div>
+
+    </div>
+
+
+    <div class="result">
+
+      <div class="label">
+        Inflation Impact
+      </div>
+
+      <div
+        class="value"
+        id="inflationImpact"
+      >
+        ₹0
+      </div>
+
+    </div>
+
 
     <div class="result full">
-      <div class="label">Real Annual Return</div>
-      <div class="value" id="realReturn">0.00%</div>
+
+      <div class="label">
+        Real Annual Return
+      </div>
+
+      <div
+        class="value"
+        id="realReturn"
+      >
+        0.00%
+      </div>
+
     </div>
 
   </div>
+
 </div>
 
+
 <div class="card">
-  <div class="card-title">Growth Chart</div>
-  <canvas id="investmentChart" width="700" height="240"></canvas>
+
+  <div class="card-title">
+    <span class="card-title-icon">📊</span>
+    Growth Chart
+  </div>
+
+  <canvas
+    id="investmentChart"
+    width="700"
+    height="240"
+  ></canvas>
+
 </div>
 
 </section>
 
 
-<!-- ================= LOAN ================= -->
 
-<section id="loan" class="panel">
+<!-- =======================================================
+     LOAN
+======================================================= -->
+
+<section
+  id="loan"
+  class="panel"
+>
 
 <div class="card">
-  <div class="card-title">Loan Inputs</div>
+
+  <div class="card-title">
+    <span class="card-title-icon">🏦</span>
+    Loan Inputs
+  </div>
+
 
   <div class="grid">
 
     <div class="field">
-      <label>Loan Principal (₹)</label>
-      <input id="loanPrincipal" type="number" value="0" min="0">
+
+      <label>
+        Loan Principal (₹)
+      </label>
+
+      <input
+        id="loanPrincipal"
+        type="number"
+        value="0"
+        min="0"
+      >
+
     </div>
 
-    <div class="field">
-      <label>Interest Rate (%)</label>
-      <input id="loanRate" type="number" value="0" min="0" step="0.01">
-    </div>
 
     <div class="field">
-      <label>Tenure (Months)</label>
-      <input id="loanTenure" type="number" value="0" min="0">
+
+      <label>
+        Interest Rate (%)
+      </label>
+
+      <input
+        id="loanRate"
+        type="number"
+        value="0"
+        min="0"
+        step="0.01"
+      >
+
     </div>
 
-    <div class="field">
-      <label>Extra Monthly Payment (₹)</label>
-      <input id="extraMonthly" type="number" value="0" min="0">
-    </div>
 
     <div class="field">
-      <label>Extra Yearly Payment (₹)</label>
-      <input id="extraYearly" type="number" value="0" min="0">
+
+      <label>
+        Tenure (Months)
+      </label>
+
+      <input
+        id="loanTenure"
+        type="number"
+        value="0"
+        min="0"
+      >
+
     </div>
 
+
     <div class="field">
-      <label>Yearly Payment Month</label>
+
+      <label>
+        Extra Monthly Payment (₹)
+      </label>
+
+      <input
+        id="extraMonthly"
+        type="number"
+        value="0"
+        min="0"
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        Extra Yearly Payment (₹)
+      </label>
+
+      <input
+        id="extraYearly"
+        type="number"
+        value="0"
+        min="0"
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        Yearly Payment Month
+      </label>
+
       <select id="extraMonth">
-        <option value="0">None</option>
-        <option value="1">January</option>
-        <option value="2">February</option>
-        <option value="3">March</option>
-        <option value="4">April</option>
-        <option value="5">May</option>
-        <option value="6">June</option>
-        <option value="7">July</option>
-        <option value="8">August</option>
-        <option value="9">September</option>
-        <option value="10">October</option>
-        <option value="11">November</option>
-        <option value="12">December</option>
+
+        <option value="0">
+          None
+        </option>
+
+        <option value="1">
+          January
+        </option>
+
+        <option value="2">
+          February
+        </option>
+
+        <option value="3">
+          March
+        </option>
+
+        <option value="4">
+          April
+        </option>
+
+        <option value="5">
+          May
+        </option>
+
+        <option value="6">
+          June
+        </option>
+
+        <option value="7">
+          July
+        </option>
+
+        <option value="8">
+          August
+        </option>
+
+        <option value="9">
+          September
+        </option>
+
+        <option value="10">
+          October
+        </option>
+
+        <option value="11">
+          November
+        </option>
+
+        <option value="12">
+          December
+        </option>
+
       </select>
+
     </div>
 
-    <div class="field">
-      <label>One-time Prepayment (₹)</label>
-      <input id="oneTimePrepay" type="number" value="0" min="0">
-    </div>
 
     <div class="field">
-      <label>Prepay After (Months)</label>
-      <input id="prepayAfter" type="number" value="0" min="0">
+
+      <label>
+        One-time Prepayment (₹)
+      </label>
+
+      <input
+        id="oneTimePrepay"
+        type="number"
+        value="0"
+        min="0"
+      >
+
     </div>
 
+
     <div class="field">
-      <label>Preclosure / Part-payment Charges (%)</label>
-      <input id="prepayCharge" type="number" value="0" min="0" step="0.1">
+
+      <label>
+        Prepay After (Months)
+      </label>
+
+      <input
+        id="prepayAfter"
+        type="number"
+        value="0"
+        min="0"
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        Preclosure / Part-payment Charges (%)
+      </label>
+
+      <input
+        id="prepayCharge"
+        type="number"
+        value="0"
+        min="0"
+        step="0.1"
+      >
+
     </div>
 
   </div>
 
-  <button class="primary" onclick="calculateLoan()">Calculate Loan</button>
+
+  <button
+    class="primary"
+    onclick="calculateLoan()"
+  >
+    Calculate Loan →
+  </button>
+
 </div>
 
 
 <div class="card">
-  <div class="card-title">Regular Loan</div>
+
+  <div class="card-title">
+    <span class="card-title-icon">🧾</span>
+    Regular Loan
+  </div>
+
 
   <div class="results">
 
     <div class="result highlight">
-      <div class="label">Regular EMI</div>
-      <div class="value" id="loanEMI">₹0</div>
+
+      <div class="label">
+        Regular EMI
+      </div>
+
+      <div
+        class="value"
+        id="loanEMI"
+      >
+        ₹0
+      </div>
+
     </div>
 
-    <div class="result">
-      <div class="label">Original Interest</div>
-      <div class="value" id="originalInterest">₹0</div>
-    </div>
 
     <div class="result">
-      <div class="label">Original Total Paid</div>
-      <div class="value" id="originalTotal">₹0</div>
+
+      <div class="label">
+        Original Interest
+      </div>
+
+      <div
+        class="value"
+        id="originalInterest"
+      >
+        ₹0
+      </div>
+
+    </div>
+
+
+    <div class="result">
+
+      <div class="label">
+        Original Total Paid
+      </div>
+
+      <div
+        class="value"
+        id="originalTotal"
+      >
+        ₹0
+      </div>
+
     </div>
 
   </div>
+
 </div>
 
 
 <div class="card">
-  <div class="card-title">With Extra Payments</div>
+
+  <div class="card-title">
+    <span class="card-title-icon">⚡</span>
+    With Extra Payments
+  </div>
+
 
   <div class="results">
 
     <div class="result highlight">
-      <div class="label">New Closure Time</div>
-      <div class="value" id="newClosure">0 months</div>
+
+      <div class="label">
+        New Closure Time
+      </div>
+
+      <div
+        class="value"
+        id="newClosure"
+      >
+        0 months
+      </div>
+
     </div>
 
-    <div class="result">
-      <div class="label">Interest Paid</div>
-      <div class="value" id="newInterest">₹0</div>
-    </div>
 
     <div class="result">
-      <div class="label">Interest Saved</div>
-      <div class="value" id="interestSaved">₹0</div>
+
+      <div class="label">
+        Interest Paid
+      </div>
+
+      <div
+        class="value"
+        id="newInterest"
+      >
+        ₹0
+      </div>
+
     </div>
 
+
     <div class="result">
-      <div class="label">Months Saved</div>
-      <div class="value" id="monthsSaved">0</div>
+
+      <div class="label">
+        Interest Saved
+      </div>
+
+      <div
+        class="value"
+        id="interestSaved"
+      >
+        ₹0
+      </div>
+
     </div>
+
+
+    <div class="result">
+
+      <div class="label">
+        Months Saved
+      </div>
+
+      <div
+        class="value"
+        id="monthsSaved"
+      >
+        0
+      </div>
+
+    </div>
+
 
     <div class="result full">
-      <div class="label">Total Paid</div>
-      <div class="value" id="newTotal">₹0</div>
+
+      <div class="label">
+        Total Paid
+      </div>
+
+      <div
+        class="value"
+        id="newTotal"
+      >
+        ₹0
+      </div>
+
     </div>
 
   </div>
+
 </div>
 
 
 <div class="card">
-  <div class="card-title">Target Closure</div>
+
+  <div class="card-title">
+    <span class="card-title-icon">🎯</span>
+    Target Closure
+  </div>
+
 
   <div class="grid">
 
     <div class="field full">
-      <label>Target Closure (Months)</label>
-      <input id="targetMonths" type="number" value="0" min="0">
+
+      <label>
+        Target Closure (Months)
+      </label>
+
+      <input
+        id="targetMonths"
+        type="number"
+        value="0"
+        min="0"
+      >
+
     </div>
 
   </div>
 
-  <button class="primary" onclick="calculateTarget()">Calculate Required Yearly Extra</button>
 
-  <div class="results" style="margin-top:14px">
+  <button
+    class="primary"
+    onclick="calculateTarget()"
+  >
+    Calculate Required Yearly Extra →
+  </button>
+
+
+  <div
+    class="results"
+    style="margin-top:14px"
+  >
 
     <div class="result highlight full">
-      <div class="label">Required Extra Per Year</div>
-      <div class="value" id="requiredYearly">₹0</div>
+
+      <div class="label">
+        Required Extra Per Year
+      </div>
+
+      <div
+        class="value"
+        id="requiredYearly"
+      >
+        ₹0
+      </div>
+
     </div>
 
   </div>
+
 
   <div class="note">
     This assumes the extra payment is made once every year in the selected payment month.
@@ -564,108 +1525,325 @@ canvas{
 </section>
 
 
-<!-- ================= INVEST VS LOAN ================= -->
 
-<section id="compare" class="panel">
+<!-- =======================================================
+     INVEST VS LOAN
+======================================================= -->
+
+<section
+  id="compare"
+  class="panel"
+>
 
 <div class="card">
-  <div class="card-title">Invest vs Loan</div>
 
-  <div class="grid">
+  <div class="card-title">
+    <span class="card-title-icon">⚖️</span>
+    Invest vs Loan
+  </div>
+
+
+  <div class="note">
+    Compare the investment gains required to offset your loan interest.
+  </div>
+
+
+  <div
+    class="grid"
+    style="margin-top:15px"
+  >
 
     <div class="field">
-      <label>Loan Interest to Offset (₹)</label>
-      <input id="compareInterest" type="number" value="0" min="0">
+
+      <label>
+        Loan Interest to Offset (₹)
+      </label>
+
+      <input
+        id="compareInterest"
+        type="number"
+        value="0"
+        min="0"
+      >
+
+      <div class="auto-note">
+        Auto-filled from Loan → Original Interest
+      </div>
+
+      <div class="small">
+        You can edit this value whenever you want.
+      </div>
+
     </div>
 
-    <div class="field">
-      <label>Expected Investment Return (%)</label>
-      <input id="compareReturn" type="number" value="0" min="0" step="0.1">
-    </div>
 
     <div class="field">
-      <label>Investment Period (Years)</label>
-      <input id="compareYears" type="number" value="0" min="0" step="0.5">
+
+      <label>
+        Expected Investment Return (%)
+      </label>
+
+      <input
+        id="compareReturn"
+        type="number"
+        value="0"
+        min="0"
+        step="0.1"
+      >
+
     </div>
 
+
     <div class="field">
-      <label>Investment Method</label>
-      <select id="investmentMethod" onchange="toggleInvestmentMethod()">
-        <option value="sip">SIP only — no lump sum</option>
-        <option value="lumpSip">Lump sum + SIP</option>
+
+      <label>
+        Investment Period (Years)
+      </label>
+
+      <input
+        id="compareYears"
+        type="number"
+        value="0"
+        min="0"
+        step="0.5"
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        Investment Method
+      </label>
+
+      <select
+        id="investmentMethod"
+        onchange="toggleInvestmentMethod()"
+      >
+
+        <option value="sip">
+          SIP only — no lump sum
+        </option>
+
+        <option value="lumpSip">
+          Lump sum + SIP
+        </option>
+
       </select>
+
     </div>
 
-    <div class="field full" id="compareLumpField" style="display:none">
-      <label>Starting Lump Sum (₹)</label>
-      <input id="compareLump" type="number" value="0" min="0">
+
+    <div
+      class="field full"
+      id="compareLumpField"
+      style="display:none"
+    >
+
+      <label>
+        Starting Lump Sum (₹)
+      </label>
+
+      <input
+        id="compareLump"
+        type="number"
+        value="0"
+        min="0"
+      >
+
     </div>
 
   </div>
 
-  <button class="primary" onclick="calculateCompare()">Calculate</button>
+
+  <button
+    class="primary"
+    onclick="calculateCompare()"
+  >
+    Calculate →
+  </button>
+
 </div>
 
 
 <div class="card">
-  <div class="card-title">Investment Required</div>
+
+  <div class="card-title">
+    <span class="card-title-icon">🎯</span>
+    Investment Required
+  </div>
+
 
   <div class="results">
 
     <div class="result">
-      <div class="label">Loan Interest to Offset</div>
-      <div class="value" id="offsetInterest">₹0</div>
+
+      <div class="label">
+        Loan Interest to Offset
+      </div>
+
+      <div
+        class="value"
+        id="offsetInterest"
+      >
+        ₹0
+      </div>
+
     </div>
+
 
     <div class="result highlight">
-      <div class="label">Required Monthly SIP</div>
-      <div class="value" id="requiredSIP">₹0</div>
+
+      <div class="label">
+        Required Monthly SIP
+      </div>
+
+      <div
+        class="value"
+        id="requiredSIP"
+      >
+        ₹0
+      </div>
+
     </div>
 
-    <div class="result">
-      <div class="label">Required Lump Sum Today</div>
-      <div class="value" id="requiredLump">₹0</div>
-    </div>
 
     <div class="result">
-      <div class="label">Investment Gains</div>
-      <div class="value" id="investmentGains">₹0</div>
+
+      <div class="label">
+        Required Lump Sum Today
+      </div>
+
+      <div
+        class="value"
+        id="requiredLump"
+      >
+        ₹0
+      </div>
+
     </div>
 
-    <div class="result">
-      <div class="label">Total SIP Contributions</div>
-      <div class="value" id="sipContributions">₹0</div>
-    </div>
 
     <div class="result">
-      <div class="label">Starting Lump Sum</div>
-      <div class="value" id="startingLump">₹0</div>
+
+      <div class="label">
+        Investment Gains
+      </div>
+
+      <div
+        class="value"
+        id="investmentGains"
+      >
+        ₹0
+      </div>
+
     </div>
 
+
     <div class="result">
-      <div class="label">Total Investment</div>
-      <div class="value" id="totalInvestment">₹0</div>
+
+      <div class="label">
+        Total SIP Contributions
+      </div>
+
+      <div
+        class="value"
+        id="sipContributions"
+      >
+        ₹0
+      </div>
+
     </div>
+
+
+    <div class="result">
+
+      <div class="label">
+        Starting Lump Sum
+      </div>
+
+      <div
+        class="value"
+        id="startingLump"
+      >
+        ₹0
+      </div>
+
+    </div>
+
+
+    <div class="result">
+
+      <div class="label">
+        Total Investment
+      </div>
+
+      <div
+        class="value"
+        id="totalInvestment"
+      >
+        ₹0
+      </div>
+
+    </div>
+
 
     <div class="result highlight">
-      <div class="label">Final Investment Corpus</div>
-      <div class="value" id="finalCorpus">₹0</div>
+
+      <div class="label">
+        Final Investment Corpus
+      </div>
+
+      <div
+        class="value"
+        id="finalCorpus"
+      >
+        ₹0
+      </div>
+
     </div>
 
-    <div class="result full">
-      <div class="label">Investment Profit</div>
-      <div class="value" id="compareProfit">₹0</div>
-    </div>
 
     <div class="result full">
-      <div class="label">Net Position / Break-even</div>
-      <div class="value" id="netPosition">₹0</div>
+
+      <div class="label">
+        Investment Profit
+      </div>
+
+      <div
+        class="value"
+        id="compareProfit"
+      >
+        ₹0
+      </div>
+
+    </div>
+
+
+    <div class="result full">
+
+      <div class="label">
+        Net Position / Break-even
+      </div>
+
+      <div
+        class="value"
+        id="netPosition"
+      >
+        ₹0
+      </div>
+
     </div>
 
   </div>
 
-  <div class="note" id="compareNote">
-    Enter your loan interest and expected investment return to calculate the investment required to offset the interest.
+
+  <div
+    class="note"
+    id="compareNote"
+  >
+    Enter your expected investment return and period to calculate the investment required to offset the loan interest.
   </div>
 
 </div>
@@ -675,64 +1853,136 @@ canvas{
 </div>
 
 
+
+<!-- =======================================================
+     JAVASCRIPT
+======================================================= -->
+
 <script>
 
-function money(value){
-  if(!isFinite(value)) value=0;
 
-  return new Intl.NumberFormat("en-IN",{
-    style:"currency",
-    currency:"INR",
-    maximumFractionDigits:0
-  }).format(value);
+/* =========================================================
+   UTILITIES
+========================================================= */
+
+function money(value){
+
+  if(!isFinite(value)){
+    value=0;
+  }
+
+  return new Intl.NumberFormat(
+    "en-IN",
+    {
+      style:"currency",
+      currency:"INR",
+      maximumFractionDigits:0
+    }
+  ).format(value);
+
 }
+
 
 function num(id){
-  const v=parseFloat(document.getElementById(id).value);
-  return isFinite(v) && v>=0 ? v : 0;
+
+  const element=
+    document.getElementById(id);
+
+  if(!element){
+    return 0;
+  }
+
+  const value=
+    parseFloat(element.value);
+
+  return isFinite(value) && value>=0
+    ? value
+    : 0;
+
 }
+
+
+/* =========================================================
+   TAB NAVIGATION
+========================================================= */
 
 function showTab(id,button){
 
-  document.querySelectorAll(".panel").forEach(p=>{
-    p.classList.remove("active");
-  });
+  document
+    .querySelectorAll(".panel")
+    .forEach(panel=>{
+      panel.classList.remove("active");
+    });
 
-  document.querySelectorAll(".tab").forEach(t=>{
-    t.classList.remove("active");
-  });
+  document
+    .querySelectorAll(".tab")
+    .forEach(tab=>{
+      tab.classList.remove("active");
+    });
 
-  document.getElementById(id).classList.add("active");
+  document
+    .getElementById(id)
+    .classList.add("active");
+
   button.classList.add("active");
 
 }
 
+
+/* =========================================================
+   INVESTMENT CALCULATOR
+========================================================= */
+
 function calculateInvestment(){
 
   const sip=num("sip");
+
   const lump=num("lump");
+
   const annual=num("returnRate");
+
   const years=num("years");
+
   const stepup=num("stepup");
+
   const inflation=num("inflation");
 
-  const months=Math.round(years*12);
+
+  const months=
+    Math.round(years*12);
+
 
   let balance=lump;
+
   let invested=lump;
+
   let currentSip=sip;
 
-  const chart=[];
+
   const yearlyData=[];
+
 
   if(months>0){
 
-    for(let m=1;m<=months;m++){
+    for(
+      let m=1;
+      m<=months;
+      m++
+    ){
 
-      const monthlyRate=annual/100/12;
+      const monthlyRate=
+        annual/100/12;
 
-      balance=balance*(1+monthlyRate)+currentSip;
+
+      balance=
+        balance*
+        (1+monthlyRate)
+        +
+        currentSip;
+
+
       invested+=currentSip;
+
 
       if(m%12===0){
 
@@ -741,118 +1991,310 @@ function calculateInvestment(){
           value:balance
         });
 
-        currentSip=currentSip*(1+stepup/100);
+
+        currentSip=
+          currentSip*
+          (1+stepup/100);
+
       }
 
     }
 
-  }else{
+  }
+  else{
+
     balance=lump;
+
     invested=lump;
+
   }
 
-  const profit=balance-invested;
 
-  let realCorpus=balance;
+  const profit=
+    balance-invested;
 
-  if(inflation>0 && years>0){
-    realCorpus=balance/Math.pow(1+inflation/100,years);
+
+  let realCorpus=
+    balance;
+
+
+  if(
+    inflation>0 &&
+    years>0
+  ){
+
+    realCorpus=
+      balance/
+      Math.pow(
+        1+inflation/100,
+        years
+      );
+
   }
 
-  const inflationImpact=balance-realCorpus;
+
+  const inflationImpact=
+    balance-realCorpus;
+
 
   let realReturn=annual;
 
+
   if(inflation>0){
-    realReturn=((1+annual/100)/(1+inflation/100)-1)*100;
+
+    realReturn=
+      (
+        (1+annual/100)/
+        (1+inflation/100)
+        -1
+      )*100;
+
   }
 
-  const multiple=invested>0 ? balance/invested : 0;
 
-  document.getElementById("invInvested").textContent=money(invested);
-  document.getElementById("invCorpus").textContent=money(balance);
-  document.getElementById("invProfit").textContent=money(profit);
-  document.getElementById("wealthMultiple").textContent=multiple.toFixed(2)+"×";
-  document.getElementById("realCorpus").textContent=money(realCorpus);
-  document.getElementById("inflationImpact").textContent=money(inflationImpact);
-  document.getElementById("realReturn").textContent=realReturn.toFixed(2)+"%";
+  const multiple=
+    invested>0
+      ? balance/invested
+      : 0;
+
+
+  document
+    .getElementById("invInvested")
+    .textContent=
+    money(invested);
+
+
+  document
+    .getElementById("invCorpus")
+    .textContent=
+    money(balance);
+
+
+  document
+    .getElementById("invProfit")
+    .textContent=
+    money(profit);
+
+
+  document
+    .getElementById("wealthMultiple")
+    .textContent=
+    multiple.toFixed(2)+"×";
+
+
+  document
+    .getElementById("realCorpus")
+    .textContent=
+    money(realCorpus);
+
+
+  document
+    .getElementById("inflationImpact")
+    .textContent=
+    money(inflationImpact);
+
+
+  document
+    .getElementById("realReturn")
+    .textContent=
+    realReturn.toFixed(2)+"%";
+
 
   drawInvestmentChart(yearlyData);
 
 }
 
 
+/* =========================================================
+   INVESTMENT CHART
+========================================================= */
+
 function drawInvestmentChart(data){
 
-  const canvas=document.getElementById("investmentChart");
-  const ctx=canvas.getContext("2d");
+  const canvas=
+    document.getElementById(
+      "investmentChart"
+    );
+
+  const ctx=
+    canvas.getContext("2d");
+
 
   const w=canvas.width;
+
   const h=canvas.height;
 
-  ctx.clearRect(0,0,w,h);
+
+  ctx.clearRect(
+    0,
+    0,
+    w,
+    h
+  );
+
 
   if(!data.length){
-    ctx.fillStyle="#8a958e";
+
+    ctx.fillStyle="#69766f";
+
     ctx.font="14px system-ui";
-    ctx.fillText("Enter an investment period to see the growth chart.",20,35);
+
+    ctx.fillText(
+      "Enter an investment period to see the growth chart.",
+      20,
+      35
+    );
+
     return;
+
   }
+
 
   const pad=35;
 
-  const max=Math.max(...data.map(x=>x.value),1);
 
-  ctx.strokeStyle="#dce7e0";
+  const max=
+    Math.max(
+      ...data.map(x=>x.value),
+      1
+    );
+
+
+  ctx.strokeStyle=
+    "rgba(255,255,255,.08)";
+
   ctx.lineWidth=1;
 
-  for(let i=0;i<4;i++){
 
-    const y=pad+(h-pad*1.5)*i/3;
+  for(
+    let i=0;
+    i<4;
+    i++
+  ){
+
+    const y=
+      pad+
+      (h-pad*1.5)*
+      i/3;
+
 
     ctx.beginPath();
-    ctx.moveTo(pad,y);
-    ctx.lineTo(w-pad,y);
+
+    ctx.moveTo(
+      pad,
+      y
+    );
+
+    ctx.lineTo(
+      w-pad,
+      y
+    );
+
     ctx.stroke();
 
   }
 
+
   ctx.beginPath();
 
-  data.forEach((item,index)=>{
 
-    const x=pad+(w-pad*2)*(index/(Math.max(data.length-1,1)));
-    const y=h-pad-(item.value/max)*(h-pad*2);
+  data.forEach(
+    (item,index)=>{
 
-    if(index===0){
-      ctx.moveTo(x,y);
-    }else{
-      ctx.lineTo(x,y);
+      const x=
+        pad+
+        (w-pad*2)*
+        (
+          index/
+          Math.max(
+            data.length-1,
+            1
+          )
+        );
+
+
+      const y=
+        h-pad-
+        (item.value/max)*
+        (h-pad*2);
+
+
+      if(index===0){
+
+        ctx.moveTo(
+          x,
+          y
+        );
+
+      }
+      else{
+
+        ctx.lineTo(
+          x,
+          y
+        );
+
+      }
+
     }
+  );
 
-  });
 
-  ctx.strokeStyle="#16834b";
+  ctx.strokeStyle=
+    "#00e887";
+
   ctx.lineWidth=3;
+
   ctx.stroke();
 
 }
 
 
-function calculateEMI(principal,annualRate,months){
+/* =========================================================
+   LOAN EMI
+========================================================= */
 
-  if(principal<=0 || months<=0) return 0;
+function calculateEMI(
+  principal,
+  annualRate,
+  months
+){
 
-  const r=annualRate/100/12;
+  if(
+    principal<=0 ||
+    months<=0
+  ){
 
-  if(r===0){
-    return principal/months;
+    return 0;
+
   }
 
-  return principal*r*Math.pow(1+r,months)/
-    (Math.pow(1+r,months)-1);
+
+  const r=
+    annualRate/100/12;
+
+
+  if(r===0){
+
+    return principal/months;
+
+  }
+
+
+  return(
+    principal*r*
+    Math.pow(1+r,months)
+  )/
+  (
+    Math.pow(1+r,months)-1
+  );
+
 }
 
+
+/* =========================================================
+   LOAN SIMULATION
+========================================================= */
 
 function simulateLoan(
   principal,
@@ -866,404 +2308,35 @@ function simulateLoan(
   chargeRate
 ){
 
-  if(principal<=0 || months<=0){
-    return {
+  if(
+    principal<=0 ||
+    months<=0
+  ){
+
+    return{
       months:0,
       interest:0,
       total:0,
       charge:0
     };
+
   }
 
-  const emi=calculateEMI(principal,annualRate,months);
 
-  const r=annualRate/100/12;
+  const emi=
+    calculateEMI(
+      principal,
+      annualRate,
+      months
+    );
+
+
+  const r=
+    annualRate/100/12;
+
 
   let balance=principal;
+
   let interest=0;
-  let total=0;
-  let month=0;
-  let charge=0;
 
-  const maxMonths=Math.max(months,600);
-
-  while(balance>0.01 && month<maxMonths){
-
-    month++;
-
-    const monthlyInterest=balance*r;
-
-    let payment=emi+extraMonthly;
-
-    if(month===prepayAfter && oneTimePrepay>0){
-
-      const actual=Math.min(oneTimePrepay,balance+monthlyInterest);
-
-      const c=actual*chargeRate/100;
-
-      charge+=c;
-
-      payment+=actual+c;
-    }
-
-    if(extraYearly>0 && yearlyMonth>0){
-
-      const currentMonth=((month-1)%12)+1;
-
-      if(currentMonth===yearlyMonth){
-        payment+=extraYearly;
-      }
-
-    }
-
-    interest+=monthlyInterest;
-
-    if(payment>balance+monthlyInterest){
-      payment=balance+monthlyInterest;
-    }
-
-    balance+=monthlyInterest-payment;
-
-    if(balance<0) balance=0;
-
-    total+=payment;
-
-  }
-
-  return {
-    months:month,
-    interest:interest,
-    total:total+charge,
-    charge:charge
-  };
-
-}
-
-
-function calculateLoan(){
-
-  const principal=num("loanPrincipal");
-  const rate=num("loanRate");
-  const tenure=Math.round(num("loanTenure"));
-
-  const extraMonthly=num("extraMonthly");
-  const extraYearly=num("extraYearly");
-  const yearlyMonth=parseInt(document.getElementById("extraMonth").value)||0;
-
-  const oneTime=num("oneTimePrepay");
-  const prepayAfter=Math.round(num("prepayAfter"));
-  const charge=num("prepayCharge");
-
-  const emi=calculateEMI(principal,rate,tenure);
-
-  const original=simulateLoan(
-    principal,
-    rate,
-    tenure,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0
-  );
-
-  const modified=simulateLoan(
-    principal,
-    rate,
-    tenure,
-    extraMonthly,
-    extraYearly,
-    yearlyMonth,
-    oneTime,
-    prepayAfter,
-    charge
-  );
-
-  document.getElementById("loanEMI").textContent=money(emi);
-  document.getElementById("originalInterest").textContent=money(original.interest);
-  document.getElementById("originalTotal").textContent=money(original.total);
-
-  document.getElementById("newClosure").textContent=
-    modified.months+" months";
-
-  document.getElementById("newInterest").textContent=
-    money(modified.interest);
-
-  document.getElementById("interestSaved").textContent=
-    money(Math.max(0,original.interest-modified.interest));
-
-  document.getElementById("monthsSaved").textContent=
-    Math.max(0,original.months-modified.months);
-
-  document.getElementById("newTotal").textContent=
-    money(modified.total);
-
-}
-
-
-function calculateTarget(){
-
-  const principal=num("loanPrincipal");
-  const rate=num("loanRate");
-  const tenure=Math.round(num("loanTenure"));
-  const target=Math.round(num("targetMonths"));
-
-  const monthSelect=parseInt(document.getElementById("extraMonth").value)||0;
-
-  if(target<=0){
-
-    document.getElementById("requiredYearly").textContent="Enter a target > 0";
-    return;
-
-  }
-
-  if(principal<=0 || tenure<=0){
-
-    document.getElementById("requiredYearly").textContent="Enter loan details";
-    return;
-
-  }
-
-  if(target>=tenure){
-
-    document.getElementById("requiredYearly").textContent="₹0";
-    return;
-
-  }
-
-  const r=rate/100/12;
-  const emi=calculateEMI(principal,rate,tenure);
-
-  function balanceAfter(yearlyExtra){
-
-    let balance=principal;
-
-    for(let m=1;m<=target;m++){
-
-      const interest=balance*r;
-
-      let payment=emi;
-
-      if(yearlyExtra>0 && monthSelect>0){
-
-        const currentMonth=((m-1)%12)+1;
-
-        if(currentMonth===monthSelect){
-          payment+=yearlyExtra;
-        }
-
-      }
-
-      payment=Math.min(payment,balance+interest);
-
-      balance+=interest-payment;
-
-      if(balance<=0){
-        return 0;
-      }
-
-    }
-
-    return balance;
-  }
-
-  let low=0;
-  let high=principal*2;
-
-  for(let i=0;i<100;i++){
-
-    const mid=(low+high)/2;
-
-    if(balanceAfter(mid)>0){
-      low=mid;
-    }else{
-      high=mid;
-    }
-
-  }
-
-  const answer=high;
-
-  document.getElementById("requiredYearly").textContent=
-    money(answer);
-
-}
-
-
-function toggleInvestmentMethod(){
-
-  const method=document.getElementById("investmentMethod").value;
-
-  document.getElementById("compareLumpField").style.display=
-    method==="lumpSip" ? "flex" : "none";
-
-}
-
-
-function calculateCompare(){
-
-  const loanInterest=num("compareInterest");
-  const annualReturn=num("compareReturn");
-  const years=num("compareYears");
-
-  const method=document.getElementById("investmentMethod").value;
-
-  const startingLump=
-    method==="lumpSip" ? num("compareLump") : 0;
-
-  document.getElementById("offsetInterest").textContent=
-    money(loanInterest);
-
-  if(loanInterest<=0){
-
-    document.getElementById("compareNote").textContent=
-      "Enter the loan interest you want the investment gains to offset.";
-
-    return;
-  }
-
-  if(years<=0){
-
-    document.getElementById("compareNote").textContent=
-      "Enter an investment period greater than 0.";
-
-    return;
-  }
-
-  if(annualReturn<=0){
-
-    document.getElementById("requiredSIP").textContent="₹0";
-    document.getElementById("requiredLump").textContent="₹0";
-    document.getElementById("investmentGains").textContent="₹0";
-    document.getElementById("sipContributions").textContent="₹0";
-    document.getElementById("startingLump").textContent=money(startingLump);
-    document.getElementById("totalInvestment").textContent=money(startingLump);
-    document.getElementById("finalCorpus").textContent=money(startingLump);
-    document.getElementById("compareProfit").textContent="₹0";
-    document.getElementById("netPosition").textContent=money(-loanInterest);
-
-    document.getElementById("compareNote").textContent=
-      "At 0% investment return, there are no investment gains to offset the loan interest.";
-
-    return;
-  }
-
-  const months=Math.round(years*12);
-  const r=annualReturn/100/12;
-
-  const growth=Math.pow(1+r,months);
-
-  const sipFactor=
-    (growth-1)/r;
-
-  /*
-    Important:
-    We are solving for INVESTMENT PROFIT,
-    not final corpus.
-
-    Profit per ₹1 monthly SIP =
-    future value - total SIP contributions
-  */
-
-  const profitPerMonthlySIP=
-    sipFactor-months;
-
-  let requiredSIP=0;
-  let requiredLump=0;
-
-  let lumpGain=
-    startingLump*(growth-1);
-
-  if(method==="sip"){
-
-    if(profitPerMonthlySIP<=0){
-
-      document.getElementById("compareNote").textContent=
-        "The selected return and period do not generate enough SIP gains. Increase the return or investment period.";
-
-      return;
-    }
-
-    requiredSIP=
-      loanInterest/profitPerMonthlySIP;
-
-    requiredLump=0;
-
-  }else{
-
-    requiredLump=
-      loanInterest/(growth-1);
-
-    const remainingProfit=
-      Math.max(0,loanInterest-lumpGain);
-
-    if(profitPerMonthlySIP>0){
-      requiredSIP=
-        remainingProfit/profitPerMonthlySIP;
-    }
-
-  }
-
-  const sipContributions=
-    requiredSIP*months;
-
-  const finalCorpus=
-    startingLump*growth+
-    requiredSIP*sipFactor;
-
-  const totalInvestment=
-    startingLump+
-    sipContributions;
-
-  const investmentProfit=
-    finalCorpus-totalInvestment;
-
-  const netPosition=
-    investmentProfit-loanInterest;
-
-  document.getElementById("requiredSIP").textContent=
-    money(requiredSIP);
-
-  document.getElementById("requiredLump").textContent=
-    money(requiredLump);
-
-  document.getElementById("investmentGains").textContent=
-    money(investmentProfit);
-
-  document.getElementById("sipContributions").textContent=
-    money(sipContributions);
-
-  document.getElementById("startingLump").textContent=
-    money(startingLump);
-
-  document.getElementById("totalInvestment").textContent=
-    money(totalInvestment);
-
-  document.getElementById("finalCorpus").textContent=
-    money(finalCorpus);
-
-  document.getElementById("compareProfit").textContent=
-    money(investmentProfit);
-
-  document.getElementById("netPosition").textContent=
-    money(netPosition);
-
-  document.getElementById("compareNote").textContent=
-    method==="sip"
-      ? "SIP-only mode: the required SIP is calculated so that investment profit/gains equal the loan interest."
-      : "Lump sum + SIP mode: gains from the starting lump sum are counted first, and the SIP covers the remaining required investment profit.";
-
-}
-
-
-if("serviceWorker" in navigator){
-  window.addEventListener("load",()=>{
-    navigator.serviceWorker.register("sw.js").catch(()=>{});
-  });
-}
-
-</script>
-
-</body>
-</html>
+  let total
